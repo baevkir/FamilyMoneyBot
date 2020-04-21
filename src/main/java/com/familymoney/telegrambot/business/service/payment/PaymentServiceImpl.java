@@ -1,29 +1,39 @@
 package com.familymoney.telegrambot.business.service.payment;
 
+import com.familymoney.telegrambot.business.mapper.PaymentMapper;
+import com.familymoney.telegrambot.business.model.BotUser;
 import com.familymoney.telegrambot.business.model.Payment;
 import com.familymoney.telegrambot.business.model.PaymentCategory;
 import com.familymoney.telegrambot.business.model.PaymentType;
 import com.familymoney.telegrambot.business.service.UserService;
+import com.familymoney.telegrambot.persistence.entity.PaymentEntity;
+import com.familymoney.telegrambot.persistence.repository.PaymentRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple3;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
+@Slf4j
 @Service
 public class PaymentServiceImpl implements PaymentService {
-    Map<Long, Payment> payments = new HashMap<>();
 
+    private PaymentRepository paymentRepository;
+    private PaymentMapper paymentMapper;
     private UserService userService;
     private PaymentTypeService paymentTypeService;
     private PaymentCategoryService paymentCategoryService;
 
-    public PaymentServiceImpl(UserService userService, PaymentTypeService paymentTypeService, PaymentCategoryService paymentCategoryService) {
+    public PaymentServiceImpl(PaymentRepository paymentRepository,
+                              PaymentMapper paymentMapper,
+                              UserService userService,
+                              PaymentTypeService paymentTypeService,
+                              PaymentCategoryService paymentCategoryService) {
+        this.paymentRepository = paymentRepository;
+        this.paymentMapper = paymentMapper;
         this.userService = userService;
         this.paymentTypeService = paymentTypeService;
         this.paymentCategoryService = paymentCategoryService;
@@ -31,26 +41,39 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Flux<Payment> getAllPayments(Long chatId) {
-        return Flux.fromIterable(payments.values())
-                .filter(payment -> Objects.equals(payment.getChatId(), chatId));
+        return paymentRepository.findAllByChatId(chatId)
+                .flatMap(entity ->
+                        prepareDataForPayment(entity)
+                                .map(data -> paymentMapper.fromEntity(entity, data.getT1(), data.getT2(), data.getT3())));
     }
 
     @Override
     @Transactional
     public Mono<Payment> create(Payment payment) {
-        return userService.resolveUser(payment.getUser()).flatMap(botUser ->
-                paymentTypeService.resolvePaymentType(payment.getType()).flatMap(paymentType ->
-                        paymentCategoryService.resolvePaymentType(payment.getCategory())
-                                .map(paymentCategory -> {
-                                    payment.setId(System.currentTimeMillis());
-                                    payment.setPaymentDate(LocalDateTime.now());
-                                    payment.setUser(botUser);
-                                    payment.setType(paymentType);
-                                    payment.setCategory(paymentCategory);
-                                    payments.put(payment.getId(), payment);
-                                    return payment;
-                                })
-                ));
+        return prepareDataForPayment(payment).flatMap(data -> {
+            payment.setPaymentDate(LocalDateTime.now());
+            payment.setUser(data.getT1());
+            payment.setType(data.getT2());
+            payment.setCategory(data.getT3());
 
+            return paymentRepository.save(paymentMapper.toEntity(payment))
+                    .map(result -> paymentMapper.fromEntity(result, data.getT1(), data.getT2(), data.getT3()));
+        });
+    }
+
+    private Mono<Tuple3<BotUser, PaymentType, PaymentCategory>> prepareDataForPayment(Payment payment) {
+        return Mono.zip(
+                userService.resolve(payment.getUser()),
+                paymentTypeService.resolve(payment.getType()),
+                paymentCategoryService.resolve(payment.getCategory())
+        );
+    }
+
+    private Mono<Tuple3<BotUser, PaymentType, PaymentCategory>> prepareDataForPayment(PaymentEntity payment) {
+        return Mono.zip(
+                userService.get(payment.getUserId()),
+                paymentTypeService.get(payment.getPaymentTypeId()),
+                paymentCategoryService.get(payment.getPaymentCategoryId())
+        );
     }
 }

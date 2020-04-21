@@ -25,7 +25,12 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public Mono<BotUser> resolveUser(BotUser user) {
+    public Mono<BotUser> get(Long id) {
+        return userRepository.findById(id).map(userMapper::fromEntity);
+    }
+
+    @Override
+    public Mono<BotUser> resolve(BotUser user) {
         return userRepository.findByTelegramId(user.getTelegramId())
                 .map(userMapper::fromEntity)
                 .switchIfEmpty(create(user));

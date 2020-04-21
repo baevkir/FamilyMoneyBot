@@ -25,6 +25,11 @@ public class PaymentTypeServiceImpl implements PaymentTypeService {
     }
 
     @Override
+    public Mono<PaymentType> get(Long id) {
+        return paymentTypeRepository.findById(id).map(paymentTypeMapper::fromEntity);
+    }
+
+    @Override
     public Mono<PaymentType> create(PaymentType paymentType) {
         Objects.requireNonNull(paymentType.getChatId(), "Payment type chat id should be not null.");
         Objects.requireNonNull(paymentType.getName(), "Payment type name should be not null.");
@@ -34,7 +39,7 @@ public class PaymentTypeServiceImpl implements PaymentTypeService {
     }
 
     @Override
-    public Mono<PaymentType> resolvePaymentType(PaymentType paymentType) {
+    public Mono<PaymentType> resolve(PaymentType paymentType) {
         if (paymentType.getId() != null) {
             return paymentTypeRepository.findById(paymentType.getId())
                     .map(paymentTypeMapper::fromEntity);

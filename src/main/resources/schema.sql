@@ -23,3 +23,15 @@ CREATE TABLE payment_category
     name    VARCHAR(255) NOT NULL UNIQUE,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE payment
+(
+    id                  SERIAL                               NOT NULL UNIQUE,
+    chat_id             INT                                  NOT NULL,
+    user_id             INT REFERENCES bot_users (id)        NOT NULL,
+    payment_type_id     INT REFERENCES payment_type (id)     NOT NULL,
+    payment_category_id INT REFERENCES payment_category (id) NOT NULL,
+    amount              DECIMAL                              NOT NULL,
+    payment_date        TIMESTAMP                            NOT NULL,
+    PRIMARY KEY (id)
+);

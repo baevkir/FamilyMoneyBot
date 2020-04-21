@@ -7,6 +7,7 @@ import reactor.core.publisher.Mono;
 
 public interface PaymentCategoryService {
     Flux<PaymentCategory> getAll(Long chatId);
+    Mono<PaymentCategory> get(Long id);
     Mono<PaymentCategory> create(PaymentCategory paymentType);
-    Mono<PaymentCategory> resolvePaymentType(PaymentCategory paymentType);
+    Mono<PaymentCategory> resolve(PaymentCategory paymentType);
 }
