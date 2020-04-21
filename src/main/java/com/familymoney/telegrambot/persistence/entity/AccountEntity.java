@@ -6,7 +6,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 @Data
 @Table("payment_type")
-public class PaymentTypeEntity {
+public class AccountEntity {
     @Id
     private Long id;
     private Long chatId;

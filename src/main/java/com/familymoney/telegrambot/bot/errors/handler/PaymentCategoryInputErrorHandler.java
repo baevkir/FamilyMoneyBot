@@ -1,10 +1,7 @@
 package com.familymoney.telegrambot.bot.errors.handler;
 
 import com.familymoney.telegrambot.bot.errors.PaymentCategoryInputException;
-import com.familymoney.telegrambot.bot.errors.PaymentTypeInputException;
-import com.familymoney.telegrambot.business.model.PaymentCategory;
 import com.familymoney.telegrambot.business.service.payment.PaymentCategoryService;
-import com.familymoney.telegrambot.business.service.payment.PaymentTypeService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

@@ -1,7 +1,7 @@
-package com.familymoney.telegrambot.business.service.payment;
+package com.familymoney.telegrambot.business.service;
 
-import com.familymoney.telegrambot.business.mapper.PaymentTypeMapper;
-import com.familymoney.telegrambot.business.model.PaymentType;
+import com.familymoney.telegrambot.business.mapper.AccountMapper;
+import com.familymoney.telegrambot.business.model.Account;
 import com.familymoney.telegrambot.persistence.repository.PaymentTypeRepository;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
@@ -10,27 +10,27 @@ import reactor.core.publisher.Mono;
 import java.util.Objects;
 
 @Component
-public class PaymentTypeServiceImpl implements PaymentTypeService {
+public class AccountServiceImpl implements AccountService {
     private PaymentTypeRepository paymentTypeRepository;
-    private PaymentTypeMapper paymentTypeMapper;
+    private AccountMapper paymentTypeMapper;
 
-    public PaymentTypeServiceImpl(PaymentTypeRepository paymentTypeRepository, PaymentTypeMapper paymentTypeMapper) {
+    public AccountServiceImpl(PaymentTypeRepository paymentTypeRepository, AccountMapper paymentTypeMapper) {
         this.paymentTypeRepository = paymentTypeRepository;
         this.paymentTypeMapper = paymentTypeMapper;
     }
 
     @Override
-    public Flux<PaymentType> getAll(Long chatId) {
+    public Flux<Account> getAll(Long chatId) {
         return paymentTypeRepository.findAllByChatId(chatId).map(paymentTypeMapper::fromEntity);
     }
 
     @Override
-    public Mono<PaymentType> get(Long id) {
+    public Mono<Account> get(Long id) {
         return paymentTypeRepository.findById(id).map(paymentTypeMapper::fromEntity);
     }
 
     @Override
-    public Mono<PaymentType> create(PaymentType paymentType) {
+    public Mono<Account> create(Account paymentType) {
         Objects.requireNonNull(paymentType.getChatId(), "Payment type chat id should be not null.");
         Objects.requireNonNull(paymentType.getName(), "Payment type name should be not null.");
         return Mono.fromSupplier(() -> paymentTypeMapper.toEntity(paymentType))
@@ -39,7 +39,7 @@ public class PaymentTypeServiceImpl implements PaymentTypeService {
     }
 
     @Override
-    public Mono<PaymentType> resolve(PaymentType paymentType) {
+    public Mono<Account> resolve(Account paymentType) {
         if (paymentType.getId() != null) {
             return paymentTypeRepository.findById(paymentType.getId())
                     .map(paymentTypeMapper::fromEntity);

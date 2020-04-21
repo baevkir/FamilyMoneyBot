@@ -4,7 +4,8 @@ import com.familymoney.telegrambot.business.mapper.PaymentMapper;
 import com.familymoney.telegrambot.business.model.BotUser;
 import com.familymoney.telegrambot.business.model.Payment;
 import com.familymoney.telegrambot.business.model.PaymentCategory;
-import com.familymoney.telegrambot.business.model.PaymentType;
+import com.familymoney.telegrambot.business.model.Account;
+import com.familymoney.telegrambot.business.service.AccountService;
 import com.familymoney.telegrambot.business.service.UserService;
 import com.familymoney.telegrambot.persistence.entity.PaymentEntity;
 import com.familymoney.telegrambot.persistence.repository.PaymentRepository;
@@ -24,13 +25,13 @@ public class PaymentServiceImpl implements PaymentService {
     private PaymentRepository paymentRepository;
     private PaymentMapper paymentMapper;
     private UserService userService;
-    private PaymentTypeService paymentTypeService;
+    private AccountService paymentTypeService;
     private PaymentCategoryService paymentCategoryService;
 
     public PaymentServiceImpl(PaymentRepository paymentRepository,
                               PaymentMapper paymentMapper,
                               UserService userService,
-                              PaymentTypeService paymentTypeService,
+                              AccountService paymentTypeService,
                               PaymentCategoryService paymentCategoryService) {
         this.paymentRepository = paymentRepository;
         this.paymentMapper = paymentMapper;
@@ -41,10 +42,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Flux<Payment> getAllPayments(Long chatId) {
-        return paymentRepository.findAllByChatId(chatId)
-                .flatMap(entity ->
-                        prepareDataForPayment(entity)
-                                .map(data -> paymentMapper.fromEntity(entity, data.getT1(), data.getT2(), data.getT3())));
+        return paymentRepository.findAllByChatId(chatId).flatMap(entity ->
+                prepareDataForPayment(entity).map(data -> paymentMapper.fromEntity(entity, data.getT1(), data.getT2(), data.getT3())));
     }
 
     @Override
@@ -61,7 +60,7 @@ public class PaymentServiceImpl implements PaymentService {
         });
     }
 
-    private Mono<Tuple3<BotUser, PaymentType, PaymentCategory>> prepareDataForPayment(Payment payment) {
+    private Mono<Tuple3<BotUser, Account, PaymentCategory>> prepareDataForPayment(Payment payment) {
         return Mono.zip(
                 userService.resolve(payment.getUser()),
                 paymentTypeService.resolve(payment.getType()),
@@ -69,7 +68,7 @@ public class PaymentServiceImpl implements PaymentService {
         );
     }
 
-    private Mono<Tuple3<BotUser, PaymentType, PaymentCategory>> prepareDataForPayment(PaymentEntity payment) {
+    private Mono<Tuple3<BotUser, Account, PaymentCategory>> prepareDataForPayment(PaymentEntity payment) {
         return Mono.zip(
                 userService.get(payment.getUserId()),
                 paymentTypeService.get(payment.getPaymentTypeId()),

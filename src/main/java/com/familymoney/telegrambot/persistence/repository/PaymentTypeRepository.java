@@ -1,12 +1,11 @@
 package com.familymoney.telegrambot.persistence.repository;
 
-import com.familymoney.telegrambot.business.model.PaymentType;
-import com.familymoney.telegrambot.persistence.entity.PaymentTypeEntity;
+import com.familymoney.telegrambot.persistence.entity.AccountEntity;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface PaymentTypeRepository extends ReactiveCrudRepository<PaymentTypeEntity, Long> {
-    Flux<PaymentTypeEntity> findAllByChatId(Long chatId);
-    Mono<PaymentTypeEntity> findByName(String name);
+public interface PaymentTypeRepository extends ReactiveCrudRepository<AccountEntity, Long> {
+    Flux<AccountEntity> findAllByChatId(Long chatId);
+    Mono<AccountEntity> findByName(String name);
 }

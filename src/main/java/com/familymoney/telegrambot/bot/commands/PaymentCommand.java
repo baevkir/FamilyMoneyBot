@@ -1,13 +1,12 @@
 package com.familymoney.telegrambot.bot.commands;
 
-import com.familymoney.telegrambot.bot.cash.CommandsCash;
 import com.familymoney.telegrambot.bot.commands.annotations.CommandMethod;
 import com.familymoney.telegrambot.bot.commands.annotations.Param;
 import com.familymoney.telegrambot.bot.errors.PaymentCategoryInputException;
 import com.familymoney.telegrambot.bot.errors.PaymentTypeInputException;
 import com.familymoney.telegrambot.business.mapper.UserMapper;
+import com.familymoney.telegrambot.business.model.Account;
 import com.familymoney.telegrambot.business.model.PaymentCategory;
-import com.familymoney.telegrambot.business.model.PaymentType;
 import com.familymoney.telegrambot.business.service.payment.PaymentService;
 import com.familymoney.telegrambot.business.service.UserService;
 import com.familymoney.telegrambot.business.model.Payment;
@@ -48,7 +47,7 @@ public class PaymentCommand extends ReactiveBotCommand {
         Payment paymentDto = new Payment();
         paymentDto.setChatId(command.getChatId());
         paymentDto.setUser(userMapper.fromTelegramPojo(command.getFrom()));
-        paymentDto.setType(PaymentType.builder()
+        paymentDto.setType(Account.builder()
                 .chatId(command.getChatId())
                 .name(type)
                 .build());

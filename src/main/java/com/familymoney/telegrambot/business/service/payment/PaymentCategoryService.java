@@ -1,7 +1,6 @@
 package com.familymoney.telegrambot.business.service.payment;
 
 import com.familymoney.telegrambot.business.model.PaymentCategory;
-import com.familymoney.telegrambot.business.model.PaymentType;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

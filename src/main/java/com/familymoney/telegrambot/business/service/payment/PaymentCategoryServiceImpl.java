@@ -1,11 +1,8 @@
 package com.familymoney.telegrambot.business.service.payment;
 
 import com.familymoney.telegrambot.business.mapper.PaymentCategoryMapper;
-import com.familymoney.telegrambot.business.mapper.PaymentTypeMapper;
 import com.familymoney.telegrambot.business.model.PaymentCategory;
-import com.familymoney.telegrambot.business.model.PaymentType;
 import com.familymoney.telegrambot.persistence.repository.PaymentCategoryRepository;
-import com.familymoney.telegrambot.persistence.repository.PaymentTypeRepository;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

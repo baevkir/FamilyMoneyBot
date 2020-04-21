@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class PaymentType {
+public class Account {
     private Long id;
     private Long chatId;
     private String name;

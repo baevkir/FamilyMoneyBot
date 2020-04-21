@@ -1,7 +1,7 @@
 package com.familymoney.telegrambot.bot.errors.handler;
 
 import com.familymoney.telegrambot.bot.errors.PaymentTypeInputException;
-import com.familymoney.telegrambot.business.service.payment.PaymentTypeService;
+import com.familymoney.telegrambot.business.service.AccountService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 
 @Component
 public class PaymentTypeInputErrorHandler implements ErrorHandler<PaymentTypeInputException> {
-    private PaymentTypeService paymentTypeService;
+    private AccountService paymentTypeService;
 
-    public PaymentTypeInputErrorHandler(PaymentTypeService paymentTypeService) {
+    public PaymentTypeInputErrorHandler(AccountService paymentTypeService) {
         this.paymentTypeService = paymentTypeService;
     }
 
