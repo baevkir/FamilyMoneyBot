@@ -1,6 +1,6 @@
 package com.familymoney.telegrambot.bot.errors.handler;
 
-import com.familymoney.telegrambot.bot.errors.PaymentTypeInputException;
+import com.familymoney.telegrambot.bot.errors.AccountValidationException;
 import com.familymoney.telegrambot.business.service.AccountService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -14,15 +14,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class PaymentTypeInputErrorHandler implements ErrorHandler<PaymentTypeInputException> {
+public class AccountValidationErrorHandler implements ErrorHandler<AccountValidationException> {
     private AccountService paymentTypeService;
 
-    public PaymentTypeInputErrorHandler(AccountService paymentTypeService) {
+    public AccountValidationErrorHandler(AccountService paymentTypeService) {
         this.paymentTypeService = paymentTypeService;
     }
 
     @Override
-    public Mono<? extends BotApiMethod<?>> handle(Long chatId, PaymentTypeInputException exception) {
+    public Mono<? extends BotApiMethod<?>> handle(Long chatId, AccountValidationException exception) {
         return paymentTypeService.getAll(chatId).collect(Collectors.toList())
             .map(paymentTypes -> {
                 InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();

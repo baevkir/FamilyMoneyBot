@@ -31,12 +31,12 @@ public class CommandsCash {
         return cash.get(new CommandsCashKey(userId, chatId));
     }
 
-    public CommandsCashValue addArgumentToChain(Integer userId, Long chatId, Object argument) {
+    public CommandsCashValue updateArgumentsInChain(Integer userId, Long chatId, List<Object> arguments) {
         Objects.requireNonNull(userId, "userId is null");
         Objects.requireNonNull(chatId, "chatId is null");
-        Objects.requireNonNull(argument, "argument is null");
+        Objects.requireNonNull(arguments, "arguments is null");
         CommandsCashValue cashValue = cash.get(new CommandsCashKey(userId, chatId));
-        cashValue.arguments.add(argument);
+        cashValue.arguments = arguments;
         return cashValue;
     }
 

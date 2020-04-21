@@ -2,8 +2,8 @@ package com.familymoney.telegrambot.bot.commands;
 
 import com.familymoney.telegrambot.bot.commands.annotations.CommandMethod;
 import com.familymoney.telegrambot.bot.commands.annotations.Param;
-import com.familymoney.telegrambot.bot.errors.PaymentCategoryInputException;
-import com.familymoney.telegrambot.bot.errors.PaymentTypeInputException;
+import com.familymoney.telegrambot.bot.errors.PaymentCategoryValidationException;
+import com.familymoney.telegrambot.bot.errors.AccountValidationException;
 import com.familymoney.telegrambot.business.mapper.UserMapper;
 import com.familymoney.telegrambot.business.model.Account;
 import com.familymoney.telegrambot.business.model.PaymentCategory;
@@ -26,22 +26,20 @@ public class PaymentCommand extends ReactiveBotCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(HelpCommand.class);
 
     private PaymentService paymentService;
-    private UserService userService;
     private UserMapper userMapper;
 
     @Autowired
-    public PaymentCommand(PaymentService paymentService, UserService userService, UserMapper userMapper) {
+    public PaymentCommand(PaymentService paymentService, UserMapper userMapper) {
         super("payment", "Создать платеж в системе.");
         this.paymentService = paymentService;
-        this.userService = userService;
         this.userMapper = userMapper;
     }
 
     @CommandMethod
     public Mono<? extends BotApiMethod<?>> process(
             Message command,
-            @Param(index = 0, displayName = "Вид оплаты", errorType = PaymentTypeInputException.class) String type,
-            @Param(index = 1, displayName = "Категорию", errorType = PaymentCategoryInputException.class) String category,
+            @Param(index = 0, displayName = "Вид оплаты", errorType = AccountValidationException.class) String type,
+            @Param(index = 1, displayName = "Категорию", errorType = PaymentCategoryValidationException.class) String category,
             @Param(index = 2, displayName = "Сумма") BigDecimal amount) {
 
         Payment paymentDto = new Payment();
