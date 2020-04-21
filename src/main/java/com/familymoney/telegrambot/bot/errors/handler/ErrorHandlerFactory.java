@@ -1,5 +1,6 @@
 package com.familymoney.telegrambot.bot.errors.handler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import reactor.core.publisher.Mono;
@@ -10,9 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class ErrorHandlerFactory {
-    private ChatInputErrorHandler chatInputErrorHandler;
     private List<ErrorHandler> errorHandlers;
     private Map<Class, ErrorHandler> errorHandlerMap = new HashMap<>();
 
@@ -22,7 +23,12 @@ public class ErrorHandlerFactory {
 
     @SuppressWarnings("unchecked")
     public Mono<? extends BotApiMethod<?>> handle(Long chatId, Throwable exception) {
-        return errorHandlerMap.getOrDefault(exception.getClass(), chatInputErrorHandler).handle(chatId, exception);
+        ErrorHandler errorHandler = errorHandlerMap.get(exception.getClass());
+        if (errorHandler != null) {
+            return errorHandler.handle(chatId, exception);
+        }
+        log.error("Error during chat bot command", exception);
+        return Mono.empty();
     }
 
     @PostConstruct

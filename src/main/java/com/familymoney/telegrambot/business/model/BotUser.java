@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class BotUser {
-    private Integer id;
+    private Long id;
+    private Integer telegramId;
     private String userName;
     private String firstName;
     private String lastName;
-    private String familyName;
 }
