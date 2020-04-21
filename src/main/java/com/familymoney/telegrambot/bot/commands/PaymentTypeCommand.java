@@ -2,8 +2,8 @@ package com.familymoney.telegrambot.bot.commands;
 
 import com.familymoney.telegrambot.bot.commands.annotations.CommandMethod;
 import com.familymoney.telegrambot.bot.commands.annotations.Param;
-import com.familymoney.telegrambot.business.service.PaymentTypeService;
 import com.familymoney.telegrambot.business.model.PaymentType;
+import com.familymoney.telegrambot.business.service.payment.PaymentTypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class PaymentTypeCommand extends ReactiveBotCommand {
-    private static final Logger LOGGER = LoggerFactory.getLogger(HelpCommand.class);
 
     private PaymentTypeService paymentTypeService;
 
@@ -27,10 +26,10 @@ public class PaymentTypeCommand extends ReactiveBotCommand {
 
     @CommandMethod
     public Mono<? extends BotApiMethod<?>> process(Message command, @Param(index = 0, displayName = "Имя вида оплаты") String type) {
-        PaymentType paymentType = new PaymentType();
-        paymentType.setChatId(command.getChatId());
-        paymentType.setName(type);
-        return paymentTypeService.create(paymentType)
+        return paymentTypeService.create(PaymentType.builder()
+                .chatId(command.getChatId())
+                .name(type)
+                .build())
                 .map(result -> new SendMessage(command.getChatId(), String.format("Вид оплаты %s успешно создан.", type)));
     }
 

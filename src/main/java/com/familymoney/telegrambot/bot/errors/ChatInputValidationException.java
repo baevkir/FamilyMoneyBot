@@ -1,10 +1,10 @@
 package com.familymoney.telegrambot.bot.errors;
 
-public class ChatInputException extends RuntimeException {
+public class ChatInputValidationException extends RuntimeException {
 
     private Long chatId;
 
-    public ChatInputException(Long chatId, String message) {
+    public ChatInputValidationException(Long chatId, String message) {
         super(message);
         this.chatId = chatId;
     }

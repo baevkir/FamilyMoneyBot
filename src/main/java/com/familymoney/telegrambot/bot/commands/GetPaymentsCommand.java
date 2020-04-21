@@ -1,7 +1,7 @@
 package com.familymoney.telegrambot.bot.commands;
 
 import com.familymoney.telegrambot.bot.commands.annotations.CommandMethod;
-import com.familymoney.telegrambot.business.service.PaymentService;
+import com.familymoney.telegrambot.business.service.payment.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -27,10 +27,11 @@ public class GetPaymentsCommand extends ReactiveBotCommand {
         return paymentService.getAllPayments(command.getChatId()).collect(Collectors.toList()).map(payments -> {
             String message = payments.stream()
                     .map(payment -> String.format(
-                            "Дата: %s Вид Оплаты: %s Пользователь: %s Сумма: %s",
-                            payment.getPaymentDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
-                            payment.getType(),
+                            "Пользователь: %s Дата: %s Вид Оплаты: %s Категория: %s Сумма: %s",
                             payment.getUser().getUserName(),
+                            payment.getPaymentDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+                            payment.getType().getName(),
+                            payment.getCategory().getName(),
                             payment.getAmount()))
                     .collect(Collectors.joining("\n", "Платежи:\n", ""));
 

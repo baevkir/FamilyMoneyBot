@@ -18,12 +18,21 @@ public interface UserMapper {
             @Mapping(source = "id", target = "telegramId"),
             @Mapping(target = "id", ignore = true),
     })
-    UserEntity toEntity(User user);
+    BotUser fromTelegramPojo(User user);
+
+    UserEntity toEntity(BotUser user);
 
     @AfterMapping
     default void updateEntity(@MappingTarget UserEntity entity) {
         if (entity.getUserName() == null) {
             entity.setUserName(entity.getFirstName() + " " + entity.getLastName());
+        }
+    }
+
+    @AfterMapping
+    default void updateUser(@MappingTarget BotUser user) {
+        if (user.getUserName() == null) {
+            user.setUserName(user.getFirstName() + " " + user.getLastName());
         }
     }
 }

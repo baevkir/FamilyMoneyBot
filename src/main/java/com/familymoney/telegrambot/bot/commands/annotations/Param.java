@@ -1,6 +1,6 @@
 package com.familymoney.telegrambot.bot.commands.annotations;
 
-import com.familymoney.telegrambot.bot.errors.ChatInputException;
+import com.familymoney.telegrambot.bot.errors.ChatInputValidationException;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,5 +12,5 @@ import java.lang.annotation.Target;
 public @interface Param {
     int index();
     String displayName();
-    Class<? extends ChatInputException> errorType() default ChatInputException.class;
+    Class<? extends ChatInputValidationException> errorType() default ChatInputValidationException.class;
 }

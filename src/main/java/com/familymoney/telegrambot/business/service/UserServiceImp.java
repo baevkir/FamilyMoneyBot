@@ -18,15 +18,15 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public Mono<BotUser> create(User user) {
+    public Mono<BotUser> create(BotUser user) {
         return Mono.fromSupplier(() -> userMapper.toEntity(user))
                 .flatMap(userRepository::save)
                 .map(userMapper::fromEntity);
     }
 
     @Override
-    public Mono<BotUser> resolveUser(User user) {
-        return userRepository.findByTelegramId(user.getId())
+    public Mono<BotUser> resolveUser(BotUser user) {
+        return userRepository.findByTelegramId(user.getTelegramId())
                 .map(userMapper::fromEntity)
                 .switchIfEmpty(create(user));
     }

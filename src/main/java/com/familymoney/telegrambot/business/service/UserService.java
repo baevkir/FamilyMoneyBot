@@ -6,6 +6,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface UserService {
-    Mono<BotUser> create(User user);
-    Mono<BotUser> resolveUser(User user);
+    Mono<BotUser> create(BotUser user);
+    Mono<BotUser> resolveUser(BotUser user);
 }

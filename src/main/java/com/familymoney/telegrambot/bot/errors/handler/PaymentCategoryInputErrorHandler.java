@@ -1,6 +1,9 @@
 package com.familymoney.telegrambot.bot.errors.handler;
 
+import com.familymoney.telegrambot.bot.errors.PaymentCategoryInputException;
 import com.familymoney.telegrambot.bot.errors.PaymentTypeInputException;
+import com.familymoney.telegrambot.business.model.PaymentCategory;
+import com.familymoney.telegrambot.business.service.payment.PaymentCategoryService;
 import com.familymoney.telegrambot.business.service.payment.PaymentTypeService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -14,22 +17,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class PaymentTypeInputErrorHandler implements ErrorHandler<PaymentTypeInputException> {
-    private PaymentTypeService paymentTypeService;
+public class PaymentCategoryInputErrorHandler implements ErrorHandler<PaymentCategoryInputException> {
+    private PaymentCategoryService paymentCategoryService;
 
-    public PaymentTypeInputErrorHandler(PaymentTypeService paymentTypeService) {
-        this.paymentTypeService = paymentTypeService;
+    public PaymentCategoryInputErrorHandler(PaymentCategoryService paymentCategoryService) {
+        this.paymentCategoryService = paymentCategoryService;
     }
 
     @Override
-    public Mono<? extends BotApiMethod<?>> handle(Long chatId, PaymentTypeInputException exception) {
-        return paymentTypeService.getAll(chatId).collect(Collectors.toList())
+    public Mono<? extends BotApiMethod<?>> handle(Long chatId, PaymentCategoryInputException exception) {
+        return paymentCategoryService.getAll(chatId).collect(Collectors.toList())
             .map(paymentTypes -> {
                 InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
                 List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
                 List<InlineKeyboardButton> rowInline = paymentTypes.stream()
-                        .map(paymentType ->
-                                new InlineKeyboardButton().setText(paymentType.getName()).setCallbackData(paymentType.getName()))
+                        .map(paymentCategory ->
+                                new InlineKeyboardButton().setText(paymentCategory.getName()).setCallbackData(paymentCategory.getName()))
                         .collect(Collectors.toList());
 
                 rowsInline.add(rowInline);

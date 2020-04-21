@@ -4,7 +4,7 @@ import com.familymoney.telegrambot.bot.CommandRequest;
 import com.familymoney.telegrambot.bot.cash.CommandsCash;
 import com.familymoney.telegrambot.bot.commands.annotations.CommandMethod;
 import com.familymoney.telegrambot.bot.commands.annotations.Param;
-import com.familymoney.telegrambot.bot.errors.ChatInputException;
+import com.familymoney.telegrambot.bot.errors.ChatInputValidationException;
 import com.familymoney.telegrambot.bot.errors.handler.ChatInputErrorHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -86,10 +86,10 @@ public abstract class ReactiveBotCommand implements BotCommand {
         throw createException(commandRequest, param);
     }
 
-    private ChatInputException createException(CommandRequest commandRequest, Param param) {
+    private ChatInputValidationException createException(CommandRequest commandRequest, Param param) {
         String message = String.format("Пожалуйста укажите %s.", param.displayName());
         try {
-            Constructor<? extends ChatInputException> constructor = param.errorType().getConstructor(Long.class, String.class);
+            Constructor<? extends ChatInputValidationException> constructor = param.errorType().getConstructor(Long.class, String.class);
             return constructor.newInstance(commandRequest.getCommandMessage().getChatId(), message);
         } catch (Exception exception) {
             throw new RuntimeException();

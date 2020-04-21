@@ -10,7 +10,8 @@ public class Payment {
     private Long id;
     private Long chatId;
     private BotUser user;
-    private String type;
+    private PaymentType type;
+    private PaymentCategory category;
     private BigDecimal amount;
     private LocalDateTime paymentDate;
 }
