@@ -12,7 +12,7 @@ CREATE TABLE payment_type
 (
     id      SERIAL       NOT NULL UNIQUE,
     chat_id INT          NOT NULL,
-    name    VARCHAR(255) NOT NULL,
+    name    VARCHAR(255) NOT NULL UNIQUE,
     PRIMARY KEY (id)
 );
 
@@ -20,6 +20,6 @@ CREATE TABLE payment_category
 (
     id      SERIAL       NOT NULL UNIQUE,
     chat_id INT          NOT NULL,
-    name    VARCHAR(255) NOT NULL,
+    name    VARCHAR(255) NOT NULL UNIQUE,
     PRIMARY KEY (id)
 );
