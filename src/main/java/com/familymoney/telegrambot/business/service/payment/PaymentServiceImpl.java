@@ -16,7 +16,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple3;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Slf4j
 @Service
@@ -25,23 +25,23 @@ public class PaymentServiceImpl implements PaymentService {
     private PaymentRepository paymentRepository;
     private PaymentMapper paymentMapper;
     private UserService userService;
-    private AccountService paymentTypeService;
+    private AccountService accountService;
     private PaymentCategoryService paymentCategoryService;
 
     public PaymentServiceImpl(PaymentRepository paymentRepository,
                               PaymentMapper paymentMapper,
                               UserService userService,
-                              AccountService paymentTypeService,
+                              AccountService accountService,
                               PaymentCategoryService paymentCategoryService) {
         this.paymentRepository = paymentRepository;
         this.paymentMapper = paymentMapper;
         this.userService = userService;
-        this.paymentTypeService = paymentTypeService;
+        this.accountService = accountService;
         this.paymentCategoryService = paymentCategoryService;
     }
 
     @Override
-    public Flux<Payment> getAllPayments(Long chatId) {
+    public Flux<Payment> getAll(Long chatId) {
         return paymentRepository.findAllByChatId(chatId).flatMap(entity ->
                 prepareDataForPayment(entity).map(data -> paymentMapper.fromEntity(entity, data.getT1(), data.getT2(), data.getT3())));
     }
@@ -50,9 +50,9 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public Mono<Payment> create(Payment payment) {
         return prepareDataForPayment(payment).flatMap(data -> {
-            payment.setPaymentDate(LocalDateTime.now());
+            payment.setDate(LocalDate.now());
             payment.setUser(data.getT1());
-            payment.setType(data.getT2());
+            payment.setAccount(data.getT2());
             payment.setCategory(data.getT3());
 
             return paymentRepository.save(paymentMapper.toEntity(payment))
@@ -63,7 +63,7 @@ public class PaymentServiceImpl implements PaymentService {
     private Mono<Tuple3<BotUser, Account, PaymentCategory>> prepareDataForPayment(Payment payment) {
         return Mono.zip(
                 userService.resolve(payment.getUser()),
-                paymentTypeService.resolve(payment.getType()),
+                accountService.resolve(payment.getAccount()),
                 paymentCategoryService.resolve(payment.getCategory())
         );
     }
@@ -71,7 +71,7 @@ public class PaymentServiceImpl implements PaymentService {
     private Mono<Tuple3<BotUser, Account, PaymentCategory>> prepareDataForPayment(PaymentEntity payment) {
         return Mono.zip(
                 userService.get(payment.getUserId()),
-                paymentTypeService.get(payment.getPaymentTypeId()),
+                accountService.get(payment.getAccountId()),
                 paymentCategoryService.get(payment.getPaymentCategoryId())
         );
     }

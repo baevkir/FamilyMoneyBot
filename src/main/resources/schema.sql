@@ -8,7 +8,7 @@ CREATE TABLE bot_users
     PRIMARY KEY (id)
 );
 
-CREATE TABLE account
+CREATE TABLE accounts
 (
     id      SERIAL       NOT NULL UNIQUE,
     chat_id INT          NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE account
     PRIMARY KEY (id)
 );
 
-CREATE TABLE payment_category
+CREATE TABLE payment_categories
 (
     id      SERIAL       NOT NULL UNIQUE,
     chat_id INT          NOT NULL,
@@ -24,14 +24,26 @@ CREATE TABLE payment_category
     PRIMARY KEY (id)
 );
 
-CREATE TABLE payment
+CREATE TABLE payments
 (
-    id                  SERIAL                               NOT NULL UNIQUE,
-    chat_id             INT                                  NOT NULL,
-    user_id             INT REFERENCES bot_users (id)        NOT NULL,
-    payment_type_id     INT REFERENCES account (id)     NOT NULL,
-    payment_category_id INT REFERENCES payment_category (id) NOT NULL,
-    amount              DECIMAL                              NOT NULL,
-    payment_date        TIMESTAMP                            NOT NULL,
+    id                  SERIAL                                 NOT NULL UNIQUE,
+    chat_id             INT                                    NOT NULL,
+    user_id             INT REFERENCES bot_users (id)          NOT NULL,
+    account_id          INT REFERENCES accounts (id)           NOT NULL,
+    payment_category_id INT REFERENCES payment_categories (id) NOT NULL,
+    amount              DECIMAL                                NOT NULL,
+    date                TIMESTAMP                              NOT NULL,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE incomes
+(
+    id         SERIAL                        NOT NULL UNIQUE,
+    chat_id    INT                           NOT NULL,
+    user_id    INT REFERENCES bot_users (id) NOT NULL,
+    account_id INT REFERENCES accounts (id)  NOT NULL,
+    amount     DECIMAL                       NOT NULL,
+    date       TIMESTAMP                     NOT NULL,
+    PRIMARY KEY (id)
+);
+

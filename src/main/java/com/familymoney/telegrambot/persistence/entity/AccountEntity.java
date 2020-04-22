@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Data
-@Table("account")
+@Table("accounts")
 public class AccountEntity {
     @Id
     private Long id;
