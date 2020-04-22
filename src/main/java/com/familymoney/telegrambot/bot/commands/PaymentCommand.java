@@ -2,6 +2,7 @@ package com.familymoney.telegrambot.bot.commands;
 
 import com.familymoney.telegrambot.bot.commands.annotations.CommandMethod;
 import com.familymoney.telegrambot.bot.commands.annotations.Param;
+import com.familymoney.telegrambot.bot.errors.DateValidationException;
 import com.familymoney.telegrambot.bot.errors.PaymentCategoryValidationException;
 import com.familymoney.telegrambot.bot.errors.AccountValidationException;
 import com.familymoney.telegrambot.business.mapper.UserMapper;
@@ -19,6 +20,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Component
 public class PaymentCommand extends ReactiveBotCommand {
@@ -37,12 +39,14 @@ public class PaymentCommand extends ReactiveBotCommand {
     @CommandMethod
     public Mono<? extends BotApiMethod<?>> process(
             Message command,
-            @Param(index = 0, displayName = "Вид оплаты", errorType = AccountValidationException.class) String type,
-            @Param(index = 1, displayName = "Категорию", errorType = PaymentCategoryValidationException.class) String category,
-            @Param(index = 2, displayName = "Сумма") BigDecimal amount) {
+            @Param(index = 0, displayName = "Дата расхода", errorType = DateValidationException.class) LocalDate date,
+            @Param(index = 1, displayName = "Вид оплаты", errorType = AccountValidationException.class) String type,
+            @Param(index = 2, displayName = "Категорию", errorType = PaymentCategoryValidationException.class) String category,
+            @Param(index = 3, displayName = "Сумма") BigDecimal amount) {
 
         Payment paymentDto = new Payment();
         paymentDto.setChatId(command.getChatId());
+        paymentDto.setDate(date);
         paymentDto.setUser(userMapper.fromTelegramPojo(command.getFrom()));
         paymentDto.setAccount(Account.builder()
                 .chatId(command.getChatId())

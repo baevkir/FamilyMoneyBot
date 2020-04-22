@@ -14,9 +14,9 @@ public interface PaymentMapper {
 
 
     @Mapping(target = "userId", source = "user.id")
-    @Mapping(target = "accountId", source = "type.id")
+    @Mapping(target = "accountId", source = "account.id")
     @Mapping(target = "paymentCategoryId", source = "category.id")
-    PaymentEntity toEntity(Payment type);
+    PaymentEntity toEntity(Payment payment);
 
     @InheritInverseConfiguration(name = "toEntity")
     Payment fromEntity(PaymentEntity entity);

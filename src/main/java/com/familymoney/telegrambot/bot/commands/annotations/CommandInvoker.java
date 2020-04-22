@@ -6,6 +6,7 @@ import com.familymoney.telegrambot.bot.errors.ChatValidationException;
 import com.familymoney.telegrambot.bot.errors.ErrorData;
 import com.familymoney.telegrambot.bot.errors.MethodArgumentValidationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.Iterables;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -34,11 +35,13 @@ import java.util.stream.Stream;
 public class CommandInvoker {
     private BotCommand command;
     private Map<String, Method> invokerMethods;
-    private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper;
 
     public CommandInvoker(BotCommand command) {
         this.command = command;
         this.invokerMethods = parseInvokerMethods(command);
+        mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
     }
 
     @SuppressWarnings("unchecked")

@@ -50,7 +50,6 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public Mono<Payment> create(Payment payment) {
         return prepareDataForPayment(payment).flatMap(data -> {
-            payment.setDate(LocalDate.now());
             payment.setUser(data.getT1());
             payment.setAccount(data.getT2());
             payment.setCategory(data.getT3());
