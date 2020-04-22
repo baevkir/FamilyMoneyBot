@@ -22,7 +22,8 @@ public class CategoryValidationErrorHandler implements ErrorHandler<PaymentCateg
     }
 
     @Override
-    public Mono<? extends BotApiMethod<?>> handle(Long chatId, PaymentCategoryValidationException exception) {
+    public Mono<? extends BotApiMethod<?>> handle(PaymentCategoryValidationException exception) {
+        Long chatId = exception.getErrorData().getCommandRequest().getCommandMessage().getChatId();
         return paymentCategoryService.getAll(chatId).collect(Collectors.toList())
             .map(paymentTypes -> {
                 InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();

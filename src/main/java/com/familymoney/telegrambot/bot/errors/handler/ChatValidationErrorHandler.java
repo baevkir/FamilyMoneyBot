@@ -10,7 +10,8 @@ import reactor.core.publisher.Mono;
 @Component
 public class ChatValidationErrorHandler implements ErrorHandler<ChatValidationException> {
     @Override
-    public Mono<? extends BotApiMethod<?>> handle(Long chatId, ChatValidationException exception) {
+    public Mono<? extends BotApiMethod<?>> handle(ChatValidationException exception) {
+        Long chatId = exception.getErrorData().getCommandRequest().getCommandMessage().getChatId();
         return Mono.fromSupplier(() -> {
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(chatId);

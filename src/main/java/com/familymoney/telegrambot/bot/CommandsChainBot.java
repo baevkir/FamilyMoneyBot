@@ -50,13 +50,14 @@ public class CommandsChainBot extends TelegramLongPollingBot {
             return;
         }
 
-        commandsFactory.getCommand(commandRequest.get().getCommand())
-                .process(commandRequest.get())
-                .subscribe(answer -> {
+        commandsFactory.getCommand(commandRequest.get().getCommand()).process(commandRequest.get())
+                .subscribe(
+                        answer -> {
                             commandsCash.closeChain(commandRequest.get().getCommandMessage());
                             executeMessage(answer);
                         },
-                        error -> errorHandler.handle(commandRequest.get().getCommandMessage().getChatId(), error).subscribe(this::executeMessage));
+                        error -> errorHandler.handle(error).subscribe(this::executeMessage)
+                );
     }
 
     @Override

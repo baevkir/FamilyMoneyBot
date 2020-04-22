@@ -22,7 +22,8 @@ public class AccountValidationErrorHandler implements ErrorHandler<AccountValida
     }
 
     @Override
-    public Mono<? extends BotApiMethod<?>> handle(Long chatId, AccountValidationException exception) {
+    public Mono<? extends BotApiMethod<?>> handle(AccountValidationException exception) {
+        Long chatId = exception.getErrorData().getCommandRequest().getCommandMessage().getChatId();
         return paymentTypeService.getAll(chatId).collect(Collectors.toList())
             .map(paymentTypes -> {
                 InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();

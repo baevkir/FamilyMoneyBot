@@ -22,10 +22,10 @@ public class ErrorHandlerFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public Mono<? extends BotApiMethod<?>> handle(Long chatId, Throwable exception) {
+    public Mono<? extends BotApiMethod<?>> handle(Throwable exception) {
         ErrorHandler errorHandler = errorHandlerMap.get(exception.getClass());
         if (errorHandler != null) {
-            return errorHandler.handle(chatId, exception);
+            return errorHandler.handle(exception);
         }
         log.error("Error during chat bot command", exception);
         return Mono.empty();
