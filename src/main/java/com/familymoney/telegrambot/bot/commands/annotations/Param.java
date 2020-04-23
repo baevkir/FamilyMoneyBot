@@ -1,6 +1,6 @@
 package com.familymoney.telegrambot.bot.commands.annotations;
 
-import com.familymoney.telegrambot.bot.errors.ChatValidationException;
+import com.familymoney.telegrambot.bot.errors.exception.validation.ChatValidationException;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,6 +1,8 @@
 package com.familymoney.telegrambot.bot;
 
-import com.familymoney.telegrambot.bot.cash.CommandsCash;
+import com.familymoney.telegrambot.bot.cash.CommandsSessionCash;
+import com.familymoney.telegrambot.bot.errors.exception.BotCommandException;
+import com.familymoney.telegrambot.bot.errors.exception.validation.ChatValidationException;
 import com.familymoney.telegrambot.bot.errors.handler.ErrorHandlerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,12 +34,12 @@ public class CommandsChainBot extends TelegramLongPollingBot {
     private String username;
 
     private CommandsFactory commandsFactory;
-    private CommandsCash commandsCash;
+    private CommandsSessionCash commandsSessionCash;
     private ErrorHandlerFactory errorHandler;
 
-    public CommandsChainBot(CommandsFactory commandsFactory, CommandsCash commandsCash, ErrorHandlerFactory errorHandler) {
+    public CommandsChainBot(CommandsFactory commandsFactory, CommandsSessionCash commandsSessionCash, ErrorHandlerFactory errorHandler) {
         this.commandsFactory = commandsFactory;
-        this.commandsCash = commandsCash;
+        this.commandsSessionCash = commandsSessionCash;
         this.errorHandler = errorHandler;
     }
 
@@ -53,7 +55,7 @@ public class CommandsChainBot extends TelegramLongPollingBot {
         commandsFactory.getCommand(commandRequest.get().getCommand()).process(commandRequest.get())
                 .subscribe(
                         answer -> {
-                            commandsCash.closeChain(commandRequest.get().getCommandMessage());
+                            commandsSessionCash.closeSession(commandRequest.get().getCommandMessage());
                             executeMessage(answer);
                         },
                         error -> errorHandler.handle(error).subscribe(this::executeMessage)
@@ -76,7 +78,7 @@ public class CommandsChainBot extends TelegramLongPollingBot {
             return Optional.of(registerNewCommandInCash(update.getMessage(), update));
         }
         if (update.hasMessage()) {
-            return Optional.ofNullable(commandsCash.getChain(update.getMessage().getFrom().getId(), update.getMessage().getChatId()))
+            return Optional.ofNullable(commandsSessionCash.getSession(update.getMessage().getFrom().getId(), update.getMessage().getChatId()))
                     .map(cashValue -> toRequest(cashValue)
                             .withUpdate(update)
                             .withPendingArgument(update.getMessage().getText())
@@ -87,7 +89,7 @@ public class CommandsChainBot extends TelegramLongPollingBot {
         if (update.hasCallbackQuery()) {
             CallbackQuery callbackQuery = update.getCallbackQuery();
             Message message = callbackQuery.getMessage();
-            return Optional.ofNullable(commandsCash.getChain(callbackQuery.getFrom().getId(), message.getChatId()))
+            return Optional.ofNullable(commandsSessionCash.getSession(callbackQuery.getFrom().getId(), message.getChatId()))
                     .map(cashValue -> toRequest(cashValue)
                             .withUpdate(update)
                             .withPendingArgument(callbackQuery.getData())
@@ -106,14 +108,14 @@ public class CommandsChainBot extends TelegramLongPollingBot {
         String command = commandSplit[0];
         List<Object> arguments = Stream.of(commandSplit).skip(1).collect(Collectors.toList());
 
-        CommandsCash.CommandsCashValue cashValue = commandsCash.openNewChain(commandMessage, command, arguments);
+        CommandsSessionCash.SessionValue cashValue = commandsSessionCash.openNewSession(commandMessage, command, arguments);
 
         return toRequest(cashValue)
                 .withUpdate(update)
                 .build();
     }
 
-    private CommandRequest.Builder toRequest(CommandsCash.CommandsCashValue cashValue) {
+    private CommandRequest.Builder toRequest(CommandsSessionCash.SessionValue cashValue) {
         return CommandRequest.builder()
                 .withCommandMessage(cashValue.getCommandMessage())
                 .withCommand(cashValue.getCommand())

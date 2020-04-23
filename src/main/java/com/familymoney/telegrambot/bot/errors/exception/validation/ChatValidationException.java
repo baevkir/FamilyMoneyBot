@@ -1,5 +1,6 @@
-package com.familymoney.telegrambot.bot.errors;
+package com.familymoney.telegrambot.bot.errors.exception.validation;
 
+import com.familymoney.telegrambot.bot.errors.ErrorData;
 import lombok.Data;
 
 @Data

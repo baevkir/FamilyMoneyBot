@@ -1,7 +1,7 @@
 package com.familymoney.telegrambot.bot.commands;
 
 import com.familymoney.telegrambot.bot.CommandRequest;
-import com.familymoney.telegrambot.bot.cash.CommandsCash;
+import com.familymoney.telegrambot.bot.cash.CommandsSessionCash;
 import com.familymoney.telegrambot.bot.commands.annotations.CommandInvoker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ public abstract class ReactiveBotCommand implements BotCommand {
 
     public final static String COMMAND_INIT_CHARACTER = "/";
 
-    private CommandsCash commandsCash;
+    private CommandsSessionCash commandsSessionCash;
     private String commandIdentifier;
     private String description;
     private CommandInvoker invoker;
@@ -28,7 +28,7 @@ public abstract class ReactiveBotCommand implements BotCommand {
     @Override
     public Mono<? extends BotApiMethod<?>> process(CommandRequest commandRequest) {
         var invocationResult = invoker.invoke(commandRequest);
-        commandsCash.updateArgumentsInChain(
+        commandsSessionCash.updateSessionArguments(
                 commandRequest.getCommandMessage().getFrom().getId(),
                 commandRequest.getCommandMessage().getChatId(),
                 invocationResult.getCommandArguments()
@@ -50,8 +50,8 @@ public abstract class ReactiveBotCommand implements BotCommand {
     }
 
     @Autowired
-    public void setCommandsCash(CommandsCash commandsCash) {
-        this.commandsCash = commandsCash;
+    public void setCommandsSessionCash(CommandsSessionCash commandsSessionCash) {
+        this.commandsSessionCash = commandsSessionCash;
     }
 
     @PostConstruct

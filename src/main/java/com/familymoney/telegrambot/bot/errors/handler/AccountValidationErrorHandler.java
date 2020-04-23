@@ -1,6 +1,6 @@
 package com.familymoney.telegrambot.bot.errors.handler;
 
-import com.familymoney.telegrambot.bot.errors.AccountValidationException;
+import com.familymoney.telegrambot.bot.errors.exception.validation.AccountValidationException;
 import com.familymoney.telegrambot.business.service.AccountService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;

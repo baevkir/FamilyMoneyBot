@@ -1,6 +1,6 @@
-package com.familymoney.telegrambot.bot.errors;
+package com.familymoney.telegrambot.bot.errors.exception.validation;
 
-import lombok.RequiredArgsConstructor;
+import com.familymoney.telegrambot.bot.errors.ErrorData;
 
 public class PaymentCategoryValidationException extends ChatValidationException {
     public PaymentCategoryValidationException(ErrorData errorData) {

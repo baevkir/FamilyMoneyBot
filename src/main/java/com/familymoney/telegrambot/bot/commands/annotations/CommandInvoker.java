@@ -2,9 +2,9 @@ package com.familymoney.telegrambot.bot.commands.annotations;
 
 import com.familymoney.telegrambot.bot.CommandRequest;
 import com.familymoney.telegrambot.bot.commands.BotCommand;
-import com.familymoney.telegrambot.bot.errors.ChatValidationException;
+import com.familymoney.telegrambot.bot.errors.exception.BotCommandException;
+import com.familymoney.telegrambot.bot.errors.exception.validation.ChatValidationException;
 import com.familymoney.telegrambot.bot.errors.ErrorData;
-import com.familymoney.telegrambot.bot.errors.MethodArgumentValidationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.Iterables;
@@ -12,7 +12,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ReflectionUtils;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -48,21 +47,27 @@ public class CommandInvoker {
     public InvocationResult invoke(CommandRequest commandRequest) {
         var invocationResult = new InvocationResult();
 
-        invocationResult.invocationMethod = findInvokerMethod(commandRequest);
-        var arguments = Stream.of(invocationResult.invocationMethod.getParameters())
-                .map(parameter -> getMethodArgument(parameter, commandRequest, invocationResult))
-                .toArray();
+        try {
+            invocationResult.invocationMethod = findInvokerMethod(commandRequest);
+            var arguments = Stream.of(invocationResult.invocationMethod.getParameters())
+                    .map(parameter -> getMethodArgument(parameter, commandRequest, invocationResult))
+                    .toArray();
 
-        if (!invocationResult.hasErrors()) {
-            invocationResult.invocation = Mono.fromSupplier(() -> {
-                ReflectionUtils.makeAccessible(invocationResult.invocationMethod);
-                return ReflectionUtils.invokeMethod(
-                        invocationResult.invocationMethod,
-                        command,
-                        arguments
-                );
-            }).flatMap(invokeResult -> (Mono<? extends BotApiMethod<?>>) Objects.requireNonNull(invokeResult));
+            if (!invocationResult.hasErrors()) {
+                invocationResult.invocation = Mono.fromSupplier(() -> {
+                    ReflectionUtils.makeAccessible(invocationResult.invocationMethod);
+                    return ReflectionUtils.invokeMethod(
+                            invocationResult.invocationMethod,
+                            command,
+                            arguments
+                    );
+                }).flatMap(invokeResult -> (Mono<? extends BotApiMethod<?>>) Objects.requireNonNull(invokeResult))
+                        .onErrorMap(error -> new BotCommandException(commandRequest, error));
+            }
+        } catch (Throwable error) {
+            invocationResult.invocationError = new BotCommandException(commandRequest, error);
         }
+
         return invocationResult;
     }
 
@@ -87,8 +92,7 @@ public class CommandInvoker {
             invocationResult.addArgument(argument);
             return argument;
         }
-        invocationResult.invocationError = createValidationException(commandRequest, param);
-        return null;
+        throw createValidationException(commandRequest, param);
     }
 
     private ChatValidationException createValidationException(CommandRequest commandRequest, Param param) {
@@ -120,7 +124,7 @@ public class CommandInvoker {
             if (defaultMethod != null) {
                 return defaultMethod;
             }
-            throw new MethodArgumentValidationException(ErrorData.builder()
+            throw new ChatValidationException(ErrorData.builder()
                     .commandRequest(commandRequest)
                     .text(String.format("Пожалуйста выберите опцию для команды '%s'", commandRequest.getCommand()))
                     .options(invokerMethods.keySet())
@@ -131,7 +135,7 @@ public class CommandInvoker {
             if (defaultMethod != null) {
                 return defaultMethod;
             }
-            throw new MethodArgumentValidationException(ErrorData.builder()
+            throw new ChatValidationException(ErrorData.builder()
                     .commandRequest(commandRequest)
                     .text(String.format("Опция '%s' не поддерживается для команды %s", argument, commandRequest.getCommand()))
                     .options(invokerMethods.keySet())

@@ -1,6 +1,6 @@
 package com.familymoney.telegrambot.bot.errors.handler;
 
-import com.familymoney.telegrambot.bot.errors.DateValidationException;
+import com.familymoney.telegrambot.bot.errors.exception.validation.DateValidationException;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

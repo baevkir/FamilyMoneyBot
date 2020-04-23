@@ -13,50 +13,50 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class CommandsCash {
-    private Map<CommandsCashKey, CommandsCashValue> cash = new ConcurrentHashMap<>();
+public class CommandsSessionCash {
+    private Map<SessionKey, SessionValue> cash = new ConcurrentHashMap<>();
 
-    public CommandsCashValue openNewChain(Message commandMessage, String command, List<Object> arguments) {
+    public SessionValue openNewSession(Message commandMessage, String command, List<Object> arguments) {
         Objects.requireNonNull(commandMessage, "command is null");
         Assert.isTrue(commandMessage.isCommand(), "message is not a command");
 
-        CommandsCashValue cashValue = new CommandsCashValue(commandMessage, command, arguments);
-        cash.put(new CommandsCashKey(commandMessage), cashValue);
+        SessionValue cashValue = new SessionValue(commandMessage, command, arguments);
+        cash.put(new SessionKey(commandMessage), cashValue);
         return cashValue;
     }
 
-    public CommandsCashValue getChain(Integer userId, Long chatId) {
+    public SessionValue getSession(Integer userId, Long chatId) {
         Objects.requireNonNull(userId, "userId is null");
         Objects.requireNonNull(chatId, "chatId is null");
-        return cash.get(new CommandsCashKey(userId, chatId));
+        return cash.get(new SessionKey(userId, chatId));
     }
 
-    public CommandsCashValue updateArgumentsInChain(Integer userId, Long chatId, List<Object> arguments) {
+    public SessionValue updateSessionArguments(Integer userId, Long chatId, List<Object> arguments) {
         Objects.requireNonNull(userId, "userId is null");
         Objects.requireNonNull(chatId, "chatId is null");
         Objects.requireNonNull(arguments, "arguments is null");
-        CommandsCashValue cashValue = cash.get(new CommandsCashKey(userId, chatId));
+        SessionValue cashValue = cash.get(new SessionKey(userId, chatId));
         cashValue.arguments = arguments;
         return cashValue;
     }
 
-    public void closeChain(Message commandMessage) {
+    public void closeSession(Message commandMessage) {
         Objects.requireNonNull(commandMessage, "command is null");
         Assert.isTrue(commandMessage.isCommand(), "message is not a command");
 
-        cash.remove(new CommandsCashKey(commandMessage));
+        cash.remove(new SessionKey(commandMessage));
     }
 
-    private static class CommandsCashKey {
+    private static class SessionKey {
         private Integer userId;
         private Long chatId;
 
-        public CommandsCashKey(Message message) {
+        public SessionKey(Message message) {
             this.userId = message.getFrom().getId();
             this.chatId = message.getChatId();
         }
 
-        public CommandsCashKey(Integer userId, Long chatId) {
+        public SessionKey(Integer userId, Long chatId) {
             this.userId = userId;
             this.chatId = chatId;
         }
@@ -69,7 +69,7 @@ public class CommandsCash {
             if (object == null || getClass() != object.getClass()) {
                 return false;
             }
-            CommandsCashKey that = (CommandsCashKey) object;
+            SessionKey that = (SessionKey) object;
             return Objects.equals(userId, that.userId) &&
                     Objects.equals(chatId, that.chatId);
         }
@@ -82,7 +82,7 @@ public class CommandsCash {
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class CommandsCashValue {
+    public static class SessionValue {
         private Message commandMessage;
         private String command;
         private List<Object> arguments;

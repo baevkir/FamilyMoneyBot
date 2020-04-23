@@ -2,14 +2,15 @@ package com.familymoney.telegrambot.bot.commands;
 
 import com.familymoney.telegrambot.bot.commands.annotations.CommandMethod;
 import com.familymoney.telegrambot.bot.commands.annotations.Param;
-import com.familymoney.telegrambot.bot.errors.DateValidationException;
-import com.familymoney.telegrambot.bot.errors.PaymentCategoryValidationException;
-import com.familymoney.telegrambot.bot.errors.AccountValidationException;
+import com.familymoney.telegrambot.bot.errors.exception.validation.DateValidationException;
+import com.familymoney.telegrambot.bot.errors.exception.validation.PaymentCategoryValidationException;
+import com.familymoney.telegrambot.bot.errors.exception.validation.AccountValidationException;
 import com.familymoney.telegrambot.business.mapper.UserMapper;
 import com.familymoney.telegrambot.business.model.Account;
 import com.familymoney.telegrambot.business.model.PaymentCategory;
 import com.familymoney.telegrambot.business.service.payment.PaymentService;
 import com.familymoney.telegrambot.business.model.Payment;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,9 @@ import reactor.core.publisher.Mono;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Slf4j
 @Component
 public class PaymentCommand extends ReactiveBotCommand {
-    private static final Logger LOGGER = LoggerFactory.getLogger(HelpCommand.class);
 
     private PaymentService paymentService;
     private UserMapper userMapper;
