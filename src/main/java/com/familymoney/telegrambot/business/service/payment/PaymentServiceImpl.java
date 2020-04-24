@@ -15,8 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple3;
+import reactor.util.function.Tuples;
 
-import java.time.LocalDate;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -41,9 +43,14 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Flux<Payment> getAll(Long chatId) {
-        return paymentRepository.findAllByChatId(chatId).flatMap(entity ->
-                prepareDataForPayment(entity).map(data -> paymentMapper.fromEntity(entity, data.getT1(), data.getT2(), data.getT3())));
+    public Flux<Payment> getAllByTelegramUserId(Integer telegramId) {
+        Objects.requireNonNull(telegramId, "telegramId is null.");
+        return userService.getByTelegramId(telegramId)
+                .flatMapMany(user -> accountService.getAllIds(user.getId()))
+                .collect(Collectors.toList())
+                .flatMapMany(userIds -> paymentRepository.findAllByAccountIdIn(userIds))
+                .flatMap(entity -> prepareDataForPayment(entity)
+                        .map(data -> paymentMapper.fromEntity(entity, data.getT1(), data.getT2(), data.getT3())));
     }
 
     @Override
@@ -60,11 +67,14 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private Mono<Tuple3<BotUser, Account, PaymentCategory>> prepareDataForPayment(Payment payment) {
-        return Mono.zip(
-                userService.resolve(payment.getUser()),
-                accountService.resolve(payment.getAccount()),
-                paymentCategoryService.resolve(payment.getCategory())
-        );
+        return userService.resolve(payment.getUser()).flatMap(user -> {
+            payment.getAccount().setUserId(user.getId());
+            payment.getCategory().setUserId(user.getId());
+            return Mono.zip(
+                    accountService.resolve(payment.getAccount()),
+                    paymentCategoryService.resolve(payment.getCategory()))
+                    .map(tuple -> Tuples.of(user, tuple.getT1(), tuple.getT2()));
+        });
     }
 
     private Mono<Tuple3<BotUser, Account, PaymentCategory>> prepareDataForPayment(PaymentEntity payment) {

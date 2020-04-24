@@ -46,15 +46,12 @@ public class PaymentCommand extends ReactiveBotCommand {
             @Param(index = 3, displayName = "Сумма") BigDecimal amount) {
 
         Payment paymentDto = new Payment();
-        paymentDto.setChatId(command.getChatId());
         paymentDto.setDate(date);
         paymentDto.setUser(userMapper.fromTelegramPojo(command.getFrom()));
         paymentDto.setAccount(Account.builder()
-                .chatId(command.getChatId())
                 .name(type)
                 .build());
         paymentDto.setCategory(PaymentCategory.builder()
-            .chatId(command.getChatId())
             .name(category)
             .build());
         paymentDto.setAmount(amount);
@@ -62,7 +59,7 @@ public class PaymentCommand extends ReactiveBotCommand {
         return paymentService.create(paymentDto)
                 .map(result -> new SendMessage(
                         command.getChatId(),
-                        String.format("Платеж пользователя %s успешно сохранен.", paymentDto.getUser().getUserName()))
+                        String.format("Платеж пользователя %s успешно сохранен.", paymentDto.getUser().getFullName()))
                 );
 
     }

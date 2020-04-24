@@ -2,51 +2,92 @@ package com.familymoney.telegrambot.business.service.payment;
 
 import com.familymoney.telegrambot.business.mapper.PaymentCategoryMapper;
 import com.familymoney.telegrambot.business.model.PaymentCategory;
-import com.familymoney.telegrambot.persistence.repository.PaymentCategoryRepository;
+import com.familymoney.telegrambot.business.service.UserService;
+import com.familymoney.telegrambot.persistence.entity.category.UserPaymentCategoryEntity;
+import com.familymoney.telegrambot.persistence.repository.category.PaymentCategoryRepository;
+import com.familymoney.telegrambot.persistence.repository.category.UserPaymentCategoryRepository;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
 public class PaymentCategoryServiceImpl implements PaymentCategoryService {
     private PaymentCategoryRepository paymentCategoryRepository;
+    private UserPaymentCategoryRepository userPaymentCategoryRepository;
     private PaymentCategoryMapper paymentCategoryMapper;
+    private UserService userService;
 
-    public PaymentCategoryServiceImpl(PaymentCategoryRepository paymentCategoryRepository, PaymentCategoryMapper paymentCategoryMapper) {
+    public PaymentCategoryServiceImpl(PaymentCategoryRepository paymentCategoryRepository,
+                                      UserPaymentCategoryRepository userPaymentCategoryRepository,
+                                      PaymentCategoryMapper paymentCategoryMapper,
+                                      UserService userService) {
         this.paymentCategoryRepository = paymentCategoryRepository;
+        this.userPaymentCategoryRepository = userPaymentCategoryRepository;
         this.paymentCategoryMapper = paymentCategoryMapper;
+        this.userService = userService;
     }
 
     @Override
-    public Flux<PaymentCategory> getAll(Long chatId) {
-        return paymentCategoryRepository.findAllByChatId(chatId).map(paymentCategoryMapper::fromEntity);
+    public Flux<PaymentCategory> getAll(Long userId) {
+        Objects.requireNonNull(userId, "UserId should be not null.");
+        return paymentCategoryRepository.findAllById(getAllIds(userId)).map(paymentCategoryMapper::fromEntity);
+    }
+
+    @Override
+    public Flux<PaymentCategory> getAllForTelegramUserId(Integer telegramId) {
+        Objects.requireNonNull(telegramId, "telegramId should be not null.");
+        return userService.getByTelegramId(telegramId).flatMapMany(user -> getAll(user.getId()));
+    }
+
+    @Override
+    public Flux<Long> getAllIds(Long userId) {
+        return userPaymentCategoryRepository.findAllByUserId(userId).map(UserPaymentCategoryEntity::getPaymentCategoryId);
     }
 
     @Override
     public Mono<PaymentCategory> get(Long id) {
+        Objects.requireNonNull(id, "Payment category id should be not null.");
         return paymentCategoryRepository.findById(id).map(paymentCategoryMapper::fromEntity);
     }
 
     @Override
+    public Mono<PaymentCategory> find(Long userId, String name) {
+        Objects.requireNonNull(name, "Payment category name should be not null.");
+        Objects.requireNonNull(userId, "UserId should be not null.");
+        return getAllIds(userId)
+                .collect(Collectors.toList())
+                .filter(CollectionUtils::isNotEmpty)
+                .flatMap(userIds -> paymentCategoryRepository.findByIdInAndName(userIds, name))
+                .map(category -> paymentCategoryMapper.fromEntity(category, userId));
+    }
+
+    @Override
+    @Transactional
     public Mono<PaymentCategory> create(PaymentCategory paymentCategory) {
-        Objects.requireNonNull(paymentCategory.getChatId(), "Payment category chat id should be not null.");
         Objects.requireNonNull(paymentCategory.getName(), "Payment category name should be not null.");
+        Objects.requireNonNull(paymentCategory.getUserId(), "User Id should be not null.");
         return Mono.fromSupplier(() -> paymentCategoryMapper.toEntity(paymentCategory))
                 .flatMap(paymentCategoryRepository::save)
-                .map(paymentCategoryMapper::fromEntity);
+                .flatMap(entity ->
+                        userPaymentCategoryRepository.save(UserPaymentCategoryEntity.builder()
+                                .userId(paymentCategory.getUserId())
+                                .paymentCategoryId(entity.getId())
+                                .build()).thenReturn(entity)
+                )
+                .map(category -> paymentCategoryMapper.fromEntity(category, paymentCategory.getUserId()));
     }
 
     @Override
     public Mono<PaymentCategory> resolve(PaymentCategory paymentCategory) {
         if (paymentCategory.getId() != null) {
-            return paymentCategoryRepository.findById(paymentCategory.getId())
-                    .map(paymentCategoryMapper::fromEntity);
+            return get(paymentCategory.getId());
         }
-        Objects.requireNonNull(paymentCategory.getName(), "Payment category name should be not null.");
-        return paymentCategoryRepository.findByName(paymentCategory.getName())
-                .map(paymentCategoryMapper::fromEntity)
+        return find(paymentCategory.getUserId(), paymentCategory.getName())
                 .switchIfEmpty(create(paymentCategory));
     }
 }

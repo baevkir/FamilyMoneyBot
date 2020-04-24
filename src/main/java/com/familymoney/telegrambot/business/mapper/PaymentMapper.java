@@ -23,6 +23,5 @@ public interface PaymentMapper {
 
 
     @Mapping(target = "id", source = "entity.id")
-    @Mapping(target = "chatId", source = "entity.chatId")
     Payment fromEntity(PaymentEntity entity, BotUser user, Account account, PaymentCategory category);
 }

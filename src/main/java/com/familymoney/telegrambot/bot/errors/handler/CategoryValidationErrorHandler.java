@@ -24,7 +24,8 @@ public class CategoryValidationErrorHandler implements ErrorHandler<PaymentCateg
     @Override
     public Mono<? extends BotApiMethod<?>> handle(PaymentCategoryValidationException exception) {
         Long chatId = exception.getErrorData().getCommandRequest().getCommandMessage().getChatId();
-        return paymentCategoryService.getAll(chatId).collect(Collectors.toList())
+        Integer telegramId = exception.getErrorData().getCommandRequest().getCommandMessage().getFrom().getId();
+        return paymentCategoryService.getAllForTelegramUserId(telegramId).collect(Collectors.toList())
             .map(paymentTypes -> {
                 InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
                 List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();

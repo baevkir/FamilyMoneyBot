@@ -24,11 +24,11 @@ public class GetPaymentsCommand extends ReactiveBotCommand {
 
     @CommandMethod
     public Mono<? extends BotApiMethod<?>> process(Message command) {
-        return paymentService.getAll(command.getChatId()).collect(Collectors.toList()).map(payments -> {
+        return paymentService.getAllByTelegramUserId(command.getFrom().getId()).collect(Collectors.toList()).map(payments -> {
             String message = payments.stream()
                     .map(payment -> String.format(
                             "Пользователь: %s Дата: %s Вид Оплаты: %s Категория: %s Сумма: %s",
-                            payment.getUser().getUserName(),
+                            payment.getUser().getFullName(),
                             payment.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
                             payment.getAccount().getName(),
                             payment.getCategory().getName(),

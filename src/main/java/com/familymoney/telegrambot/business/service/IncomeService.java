@@ -6,6 +6,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface IncomeService {
-    Flux<Income> getAll(Long chatId);
+    Flux<Income> getAllByTelegramUserId(Integer telegramId);
     Mono<Income> create(Income income);
 }

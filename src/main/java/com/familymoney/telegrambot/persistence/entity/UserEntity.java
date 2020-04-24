@@ -11,7 +11,6 @@ public class UserEntity {
     @Id
     private Long id;
     private Integer telegramId;
-    private String userName;
     private String firstName;
     private String lastName;
 }

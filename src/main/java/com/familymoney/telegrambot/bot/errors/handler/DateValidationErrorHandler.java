@@ -30,7 +30,6 @@ public class DateValidationErrorHandler implements ErrorHandler<DateValidationEx
                     .setText("Сегодня")
                     .setCallbackData(currentDate.format(DATE_FORMAT)));
 
-
             rowInline.add(new InlineKeyboardButton()
                     .setText("Вчера")
                     .setCallbackData(currentDate.minusDays(1).format(DATE_FORMAT)));

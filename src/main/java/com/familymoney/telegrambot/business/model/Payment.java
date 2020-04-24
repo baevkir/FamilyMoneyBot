@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Data
 public class Payment {
     private Long id;
-    private Long chatId;
     private BotUser user;
     private Account account;
     private PaymentCategory category;

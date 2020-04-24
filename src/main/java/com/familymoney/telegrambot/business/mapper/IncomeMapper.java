@@ -24,6 +24,5 @@ public interface IncomeMapper {
 
 
     @Mapping(target = "id", source = "entity.id")
-    @Mapping(target = "chatId", source = "entity.chatId")
     Income fromEntity(IncomeEntity entity, BotUser user, Account account);
 }

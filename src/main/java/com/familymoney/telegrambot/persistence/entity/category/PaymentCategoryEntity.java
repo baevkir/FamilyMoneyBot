@@ -1,4 +1,4 @@
-package com.familymoney.telegrambot.persistence.entity;
+package com.familymoney.telegrambot.persistence.entity.category;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -9,6 +9,5 @@ import org.springframework.data.relational.core.mapping.Table;
 public class PaymentCategoryEntity {
     @Id
     private Long id;
-    private Long chatId;
     private String name;
 }

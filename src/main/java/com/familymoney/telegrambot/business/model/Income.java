@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Data
 public class Income {
     private Long id;
-    private Long chatId;
     private BotUser user;
     private Account account;
     private BigDecimal amount;

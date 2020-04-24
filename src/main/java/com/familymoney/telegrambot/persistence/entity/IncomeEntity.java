@@ -10,7 +10,6 @@ import java.time.LocalDate;
 @Table("incomes")
 public class IncomeEntity {
     private Long id;
-    private Long chatId;
     private Long userId;
     private Long accountId;
     private BigDecimal amount;

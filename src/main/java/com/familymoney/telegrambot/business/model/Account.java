@@ -4,9 +4,9 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
+@Builder(builderClassName = "Builder")
 public class Account {
     private Long id;
-    private Long chatId;
     private String name;
+    private Long userId;
 }

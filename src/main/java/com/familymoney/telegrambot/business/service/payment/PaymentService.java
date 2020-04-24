@@ -5,6 +5,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface PaymentService {
-    Flux<Payment> getAll(Long chatId);
+    Flux<Payment> getAllByTelegramUserId(Integer telegramId);
     Mono<Payment> create(Payment payment);
 }

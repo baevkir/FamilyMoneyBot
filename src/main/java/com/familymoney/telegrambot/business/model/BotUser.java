@@ -9,4 +9,8 @@ public class BotUser {
     private String userName;
     private String firstName;
     private String lastName;
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

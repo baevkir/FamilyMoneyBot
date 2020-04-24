@@ -1,11 +1,13 @@
 package com.familymoney.telegrambot.persistence.repository;
 
-import com.familymoney.telegrambot.business.model.Income;
 import com.familymoney.telegrambot.persistence.entity.IncomeEntity;
-import com.familymoney.telegrambot.persistence.entity.PaymentEntity;
+import org.reactivestreams.Publisher;
+import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 
-public interface IncomeRepository extends ReactiveCrudRepository<IncomeEntity, Long> {
-    Flux<IncomeEntity> findAllByChatId(Long chatId);
+import java.util.List;
+
+public interface IncomeRepository extends R2dbcRepository<IncomeEntity, Long> {
+    Flux<IncomeEntity> findAllByAccountIdIn(List<Long> accountIds);
 }

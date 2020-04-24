@@ -41,10 +41,8 @@ public class IncomeCommand extends ReactiveBotCommand {
             @Param(index = 2, displayName = "Сумма") BigDecimal amount) {
 
         Income income = new Income();
-        income.setChatId(command.getChatId());
         income.setUser(userMapper.fromTelegramPojo(command.getFrom()));
         income.setAccount(Account.builder()
-                .chatId(command.getChatId())
                 .name(type)
                 .build());
         income.setAmount(amount);
@@ -52,7 +50,7 @@ public class IncomeCommand extends ReactiveBotCommand {
         return incomeService.create(income)
                 .map(result -> new SendMessage(
                         command.getChatId(),
-                        String.format("Платеж пользователя %s успешно сохранен.", income.getUser().getUserName()))
+                        String.format("Платеж пользователя %s успешно сохранен.", income.getUser().getFullName()))
                 );
 
     }

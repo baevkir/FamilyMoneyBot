@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.User;
 import reactor.core.publisher.Mono;
 
+import java.util.Objects;
+
 @Service
 public class UserServiceImp implements UserService {
     private UserRepository userRepository;
@@ -30,9 +32,14 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public Mono<BotUser> getByTelegramId(Integer telegramId) {
+        Objects.requireNonNull(telegramId, "TelegramId is Null.");
+        return userRepository.findByTelegramId(telegramId)
+                .map(userMapper::fromEntity);
+    }
+
+    @Override
     public Mono<BotUser> resolve(BotUser user) {
-        return userRepository.findByTelegramId(user.getTelegramId())
-                .map(userMapper::fromEntity)
-                .switchIfEmpty(create(user));
+        return getByTelegramId(user.getTelegramId()).switchIfEmpty(create(user));
     }
 }

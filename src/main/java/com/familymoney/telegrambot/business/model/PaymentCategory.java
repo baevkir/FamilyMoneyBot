@@ -7,6 +7,6 @@ import lombok.Data;
 @Builder
 public class PaymentCategory {
     private Long id;
-    private Long chatId;
     private String name;
+    private Long userId;
 }

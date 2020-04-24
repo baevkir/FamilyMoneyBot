@@ -4,10 +4,7 @@ import com.familymoney.telegrambot.business.mapper.IncomeMapper;
 import com.familymoney.telegrambot.business.model.Account;
 import com.familymoney.telegrambot.business.model.BotUser;
 import com.familymoney.telegrambot.business.model.Income;
-import com.familymoney.telegrambot.business.model.Payment;
-import com.familymoney.telegrambot.business.model.PaymentCategory;
 import com.familymoney.telegrambot.persistence.entity.IncomeEntity;
-import com.familymoney.telegrambot.persistence.entity.PaymentEntity;
 import com.familymoney.telegrambot.persistence.repository.IncomeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
-import reactor.util.function.Tuple3;
+import reactor.util.function.Tuples;
 
 import java.time.LocalDate;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -36,9 +35,14 @@ public class IncomeServiceImpl implements IncomeService {
     }
 
     @Override
-    public Flux<Income> getAll(Long chatId) {
-        return incomeRepository.findAllByChatId(chatId).flatMap(entity ->
-                prepareData(entity).map(data -> incomeMapper.fromEntity(entity, data.getT1(), data.getT2())));
+    public Flux<Income> getAllByTelegramUserId(Integer telegramId) {
+        Objects.requireNonNull(telegramId, "telegramId is null.");
+        return userService.getByTelegramId(telegramId)
+                .flatMapMany(user -> accountService.getAllIds(user.getId()))
+                .collect(Collectors.toList())
+                .flatMapMany(userIds -> incomeRepository.findAllByAccountIdIn(userIds))
+                .flatMap(entity -> prepareData(entity)
+                        .map(data -> incomeMapper.fromEntity(entity, data.getT1(), data.getT2())));
     }
 
     @Override
@@ -55,10 +59,11 @@ public class IncomeServiceImpl implements IncomeService {
     }
 
     private Mono<Tuple2<BotUser, Account>> prepareData(Income income) {
-        return Mono.zip(
-                userService.resolve(income.getUser()),
-                accountService.resolve(income.getAccount())
-        );
+        return userService.resolve(income.getUser()).flatMap(user -> {
+            Account account = income.getAccount();
+            account.setUserId(user.getId());
+            return accountService.resolve(account).map(result -> Tuples.of(user, result));
+        });
     }
 
     private Mono<Tuple2<BotUser, Account>> prepareData(IncomeEntity income) {

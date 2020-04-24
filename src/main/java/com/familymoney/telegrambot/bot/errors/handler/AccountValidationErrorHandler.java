@@ -15,16 +15,17 @@ import java.util.stream.Collectors;
 
 @Component
 public class AccountValidationErrorHandler implements ErrorHandler<AccountValidationException> {
-    private AccountService paymentTypeService;
+    private AccountService accountService;
 
-    public AccountValidationErrorHandler(AccountService paymentTypeService) {
-        this.paymentTypeService = paymentTypeService;
+    public AccountValidationErrorHandler(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     @Override
     public Mono<? extends BotApiMethod<?>> handle(AccountValidationException exception) {
         Long chatId = exception.getErrorData().getCommandRequest().getCommandMessage().getChatId();
-        return paymentTypeService.getAll(chatId).collect(Collectors.toList())
+        Integer telegramId = exception.getErrorData().getCommandRequest().getCommandMessage().getFrom().getId();
+        return accountService.getAllForTelegramUserId(telegramId).collect(Collectors.toList())
             .map(paymentTypes -> {
                 InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
                 List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();

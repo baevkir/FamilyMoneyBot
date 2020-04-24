@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 public class PaymentEntity {
     @Id
     private Long id;
-    private Long chatId;
     private Long userId;
     private Long accountId;
     private Long paymentCategoryId;
