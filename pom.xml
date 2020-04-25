@@ -18,7 +18,7 @@
         <java.version>11</java.version>
         <org.springframework.boot>2.2.6.RELEASE</org.springframework.boot>
         <io.spring.dependency-management>1.0.9.RELEASE</io.spring.dependency-management>
-        <telegram-bot.version>4.7</telegram-bot.version>
+        <telegram-bot.version>4.8</telegram-bot.version>
         <project-reactor.version>3.3.4.RELEASE</project-reactor.version>
         <mapstruct.version>1.3.1.Final</mapstruct.version>
         <snakeyaml>1.26</snakeyaml>
@@ -55,6 +55,16 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambotsextensions</artifactId>
+            <version>${telegram-bot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots</artifactId>
+            <version>${telegram-bot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots-meta</artifactId>
             <version>${telegram-bot.version}</version>
         </dependency>
         <dependency>
