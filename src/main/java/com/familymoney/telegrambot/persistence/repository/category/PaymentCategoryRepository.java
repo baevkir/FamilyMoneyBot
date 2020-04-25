@@ -10,5 +10,4 @@ import java.util.List;
 import java.util.concurrent.Flow;
 
 public interface PaymentCategoryRepository extends R2dbcRepository<PaymentCategoryEntity, Long> {
-    Mono<PaymentCategoryEntity> findByIdInAndName(List<Long> ids, String name);
 }

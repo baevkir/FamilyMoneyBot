@@ -5,15 +5,12 @@ import com.familymoney.telegrambot.business.model.Account;
 import com.familymoney.telegrambot.persistence.entity.account.UserAccountEntity;
 import com.familymoney.telegrambot.persistence.repository.account.AccountRepository;
 import com.familymoney.telegrambot.persistence.repository.account.UserAccountRepository;
-import com.google.common.collect.Iterables;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
@@ -68,10 +65,9 @@ public class AccountServiceImpl implements AccountService {
     public Mono<Account> find(Long userId, String name) {
         Objects.requireNonNull(userId, "Payment type name should be not null.");
         Objects.requireNonNull(name, "UserId should be not null.");
-        return getAllIds(userId)
-                .collect(Collectors.toList())
-                .filter(CollectionUtils::isNotEmpty)
-                .flatMap(accountIds -> accountRepository.findByIdInAndName(accountIds, name))
+        return accountRepository.findAllById(getAllIds(userId))
+                .filter(accountEntity -> accountEntity.getName().equals(name))
+                .next()
                 .map(entity -> accountMapper.fromEntity(entity, userId));
     }
 

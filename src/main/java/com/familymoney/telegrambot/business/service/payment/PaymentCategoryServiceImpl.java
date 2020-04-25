@@ -59,10 +59,9 @@ public class PaymentCategoryServiceImpl implements PaymentCategoryService {
     public Mono<PaymentCategory> find(Long userId, String name) {
         Objects.requireNonNull(name, "Payment category name should be not null.");
         Objects.requireNonNull(userId, "UserId should be not null.");
-        return getAllIds(userId)
-                .collect(Collectors.toList())
-                .filter(CollectionUtils::isNotEmpty)
-                .flatMap(userIds -> paymentCategoryRepository.findByIdInAndName(userIds, name))
+        return paymentCategoryRepository.findAllById(getAllIds(userId))
+                .filter(entity -> entity.getName().equals(name))
+                .next()
                 .map(category -> paymentCategoryMapper.fromEntity(category, userId));
     }
 

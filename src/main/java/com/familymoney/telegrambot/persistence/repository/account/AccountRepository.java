@@ -11,6 +11,4 @@ import java.util.Collection;
 import java.util.List;
 
 public interface AccountRepository extends R2dbcRepository<AccountEntity, Long> {
-    Mono<AccountEntity> findByIdInAndName(Collection<Long> ids, String name);
-
 }
