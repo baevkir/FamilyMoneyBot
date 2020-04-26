@@ -39,6 +39,13 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public Mono<BotUser> getByUserName(String userName) {
+        Objects.requireNonNull(userName, "userName is Null.");
+        return userRepository.findByUserName(userName)
+                .map(userMapper::fromEntity);
+    }
+
+    @Override
     public Mono<BotUser> resolve(BotUser user) {
         return getByTelegramId(user.getTelegramId()).switchIfEmpty(create(user));
     }

@@ -1,8 +1,6 @@
 package com.familymoney.telegrambot.bot;
 
 import com.familymoney.telegrambot.bot.cash.CommandsSessionCash;
-import com.familymoney.telegrambot.bot.errors.exception.BotCommandException;
-import com.familymoney.telegrambot.bot.errors.exception.validation.ChatValidationException;
 import com.familymoney.telegrambot.bot.errors.handler.ErrorHandlerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +22,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
-public class CommandsChainBot extends TelegramLongPollingBot {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommandsChainBot.class);
+public class CommandsSessionBot extends TelegramLongPollingBot {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommandsSessionBot.class);
 
     @Value("${bot.token}")
     private String token;
@@ -37,7 +35,7 @@ public class CommandsChainBot extends TelegramLongPollingBot {
     private CommandsSessionCash commandsSessionCash;
     private ErrorHandlerFactory errorHandler;
 
-    public CommandsChainBot(CommandsFactory commandsFactory, CommandsSessionCash commandsSessionCash, ErrorHandlerFactory errorHandler) {
+    public CommandsSessionBot(CommandsFactory commandsFactory, CommandsSessionCash commandsSessionCash, ErrorHandlerFactory errorHandler) {
         this.commandsFactory = commandsFactory;
         this.commandsSessionCash = commandsSessionCash;
         this.errorHandler = errorHandler;

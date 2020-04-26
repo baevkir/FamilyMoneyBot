@@ -48,7 +48,7 @@ public class CommandInvoker {
         var invocationResult = new InvocationResult();
 
         try {
-            invocationResult.invocationMethod = findInvokerMethod(commandRequest);
+            invocationResult.invocationMethod = findInvokerMethod(commandRequest, invocationResult);
             var arguments = Stream.of(invocationResult.invocationMethod.getParameters())
                     .map(parameter -> getMethodArgument(parameter, commandRequest, invocationResult))
                     .toArray();
@@ -116,7 +116,7 @@ public class CommandInvoker {
                 .collect(Collectors.toMap(method -> method.getAnnotation(CommandMethod.class).argument(), Function.identity()));
     }
 
-    private Method findInvokerMethod(CommandRequest commandRequest) {
+    private Method findInvokerMethod(CommandRequest commandRequest, InvocationResult invocationResult) {
         Object argument = Iterables.getFirst(commandRequest.getArguments(), commandRequest.getPendingArgument());
         Method defaultMethod = invokerMethods.get("");
 
@@ -141,6 +141,7 @@ public class CommandInvoker {
                     .options(invokerMethods.keySet())
                     .build());
         }
+        invocationResult.addArgument(argument);
         return method;
     }
 

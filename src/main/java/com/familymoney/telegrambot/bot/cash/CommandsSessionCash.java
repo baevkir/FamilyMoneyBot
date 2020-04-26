@@ -36,7 +36,9 @@ public class CommandsSessionCash {
         Objects.requireNonNull(chatId, "chatId is null");
         Objects.requireNonNull(arguments, "arguments is null");
         SessionValue cashValue = cash.get(new SessionKey(userId, chatId));
-        cashValue.arguments = arguments;
+        if (cashValue != null) {
+            cashValue.arguments = arguments;
+        }
         return cashValue;
     }
 

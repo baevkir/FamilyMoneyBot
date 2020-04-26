@@ -12,4 +12,5 @@ public interface AccountService {
     Mono<Account> find(Long userId, String name);
     Mono<Account> create(Account paymentType);
     Mono<Account> resolve(Account paymentType);
+    Mono<Void> shareForUser(Integer sourceTelegramId, String sourceAccountName, String targetUserName);
 }

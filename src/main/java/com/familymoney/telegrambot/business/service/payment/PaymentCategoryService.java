@@ -12,4 +12,5 @@ public interface PaymentCategoryService {
     Mono<PaymentCategory> find(Long userId, String name);
     Mono<PaymentCategory> create(PaymentCategory paymentType);
     Mono<PaymentCategory> resolve(PaymentCategory paymentType);
+    Mono<Void> shareForUser(Integer sourceTelegramId, String targetUserName);
 }

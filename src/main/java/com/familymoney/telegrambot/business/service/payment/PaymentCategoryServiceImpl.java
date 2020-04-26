@@ -1,12 +1,12 @@
 package com.familymoney.telegrambot.business.service.payment;
 
 import com.familymoney.telegrambot.business.mapper.PaymentCategoryMapper;
+import com.familymoney.telegrambot.business.model.BotUser;
 import com.familymoney.telegrambot.business.model.PaymentCategory;
 import com.familymoney.telegrambot.business.service.UserService;
 import com.familymoney.telegrambot.persistence.entity.category.UserPaymentCategoryEntity;
 import com.familymoney.telegrambot.persistence.repository.category.PaymentCategoryRepository;
 import com.familymoney.telegrambot.persistence.repository.category.UserPaymentCategoryRepository;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
@@ -89,4 +89,27 @@ public class PaymentCategoryServiceImpl implements PaymentCategoryService {
         return find(paymentCategory.getUserId(), paymentCategory.getName())
                 .switchIfEmpty(create(paymentCategory));
     }
+
+    @Override
+    public Mono<Void> shareForUser(Integer sourceTelegramId, String targetUserName) {
+        return userService.getByUserName(targetUserName).switchIfEmpty(Mono.error(() -> new RuntimeException(String.format("Пользователь %s не найден", targetUserName))))
+                .zipWith(userService.getByTelegramId(sourceTelegramId))
+                .flatMapMany(tuple -> getCategoriesToShare(tuple.getT1(), tuple.getT2()))
+                .collectList()
+                .flatMapMany(entities -> userPaymentCategoryRepository.saveAll(entities))
+                .then();
+    }
+
+    private Flux<UserPaymentCategoryEntity> getCategoriesToShare(BotUser targetUser, BotUser sourceUser) {
+        return getAllIds(targetUser.getId())
+                .collect(Collectors.toSet())
+                .flatMapMany(targetCategories -> getAllIds(sourceUser.getId()).filter(id -> !targetCategories.contains(id)))
+                .map(id ->
+                        UserPaymentCategoryEntity.builder()
+                                .userId(targetUser.getId())
+                                .paymentCategoryId(id)
+                                .build()
+                );
+    }
+
 }

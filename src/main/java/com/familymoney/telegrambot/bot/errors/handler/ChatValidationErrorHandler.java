@@ -35,6 +35,7 @@ public class ChatValidationErrorHandler implements ErrorHandler<ChatValidationEx
 
                 rowsInline.add(rowInline);
                 markupInline.setKeyboard(rowsInline);
+                sendMessage.setReplyMarkup(markupInline);
             }
             return sendMessage;
         });

@@ -8,6 +8,7 @@ import com.familymoney.telegrambot.persistence.repository.account.UserAccountRep
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -96,8 +97,26 @@ public class AccountServiceImpl implements AccountService {
                 .switchIfEmpty(create(account));
     }
 
-    private static Collection<Object[]> toPersistentCollection(Collection<Long> ids) {
-        return Collections.singleton(new Object[]{"5"});
-//        return ids.stream().map(ArrayUtils::toArray).collect(Collectors.toList());
+    @Override
+    public Mono<Void> shareForUser(Integer sourceTelegramId, String sourceAccountName, String targetUserName) {
+        return userService.getByTelegramId(sourceTelegramId)
+                .flatMap(user -> find(user.getId(), sourceAccountName))
+                .switchIfEmpty(Mono.error(() -> new RuntimeException(String.format("Вид оплаты %s не найден", sourceAccountName))))
+                .flatMap(account -> prepareAccountForUser(account, targetUserName))
+                .flatMap(userAccountRepository::save)
+                .then();
+    }
+
+    private Mono<UserAccountEntity> prepareAccountForUser(Account account, String userName) {
+        return userService.getByUserName(userName)
+                .flatMap(user -> find(user.getId(), userName)
+                        .hasElement()
+                        .map(hasElement -> {
+                            Assert.isTrue(!hasElement, () -> String.format("Вид оплаты %s уже существует для пользователя %s.", account.getName(), userName));
+                            return UserAccountEntity.builder()
+                                    .userId(user.getId())
+                                    .accountId(account.getId())
+                                    .build();
+                        }));
     }
 }
