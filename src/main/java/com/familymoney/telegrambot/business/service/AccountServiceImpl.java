@@ -5,19 +5,14 @@ import com.familymoney.telegrambot.business.model.Account;
 import com.familymoney.telegrambot.persistence.entity.account.UserAccountEntity;
 import com.familymoney.telegrambot.persistence.repository.account.AccountRepository;
 import com.familymoney.telegrambot.persistence.repository.account.UserAccountRepository;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
-import static org.testcontainers.shaded.com.google.common.collect.Iterables.toArray;
 
 @Component
 public class AccountServiceImpl implements AccountService {

@@ -18,21 +18,23 @@
         <java.version>11</java.version>
         <org.springframework.boot>2.2.6.RELEASE</org.springframework.boot>
         <io.spring.dependency-management>1.0.9.RELEASE</io.spring.dependency-management>
-        <telegram-bot.version>4.8</telegram-bot.version>
         <project-reactor.version>3.3.4.RELEASE</project-reactor.version>
         <mapstruct.version>1.3.1.Final</mapstruct.version>
         <snakeyaml>1.26</snakeyaml>
         <commons-collections4.version>4.1</commons-collections4.version>
-        <testcontainer-postgres.version>1.9.1</testcontainer-postgres.version>
-        <testcontainer-junit-jupiter.version>1.10.6</testcontainer-junit-jupiter.version>
+        <sessionbot.version>0.0.1-SNAPSHOT</sessionbot.version>
     </properties>
 
     <dependencies>
         <dependency>
+            <groupId>com.sessionbot</groupId>
+            <artifactId>sessionbot-telegram-spring-boot-starter</artifactId>
+            <version>${sessionbot.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-r2dbc</artifactId>
         </dependency>
-
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-postgresql</artifactId>
@@ -46,26 +48,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambots-spring-boot-starter</artifactId>
-            <version>${telegram-bot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambotsextensions</artifactId>
-            <version>${telegram-bot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambots</artifactId>
-            <version>${telegram-bot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambots-meta</artifactId>
-            <version>${telegram-bot.version}</version>
         </dependency>
         <dependency>
             <groupId>io.projectreactor</groupId>
@@ -91,37 +73,9 @@
             <version>${commons-collections4.version}</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.projectreactor</groupId>
-            <artifactId>reactor-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>${testcontainer-junit-jupiter.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${testcontainer-postgres.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -132,7 +86,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>11</source> <!-- depending on your project -->
+                    <source>11</source>
                     <target>11</target>
                     <annotationProcessorPaths>
                         <path>
@@ -160,6 +114,16 @@
             <id>spring-snapshots</id>
             <name>Spring Snapshots</name>
             <url>https://repo.spring.io/snapshot</url>
+        </repository>
+        <repository>
+            <id>spring-repo</id>
+            <name>Spring Repository</name>
+            <url>https://repo.spring.io/release</url>
+        </repository>
+        <repository>
+            <id>spring-milestone</id>
+            <name>Spring Milestone Repository</name>
+            <url>https://repo.spring.io/milestone</url>
         </repository>
     </repositories>
 </project>

@@ -1,7 +1,8 @@
 package com.familymoney.telegrambot.bot.commands;
 
-import com.familymoney.telegrambot.bot.commands.annotations.CommandMethod;
 import com.familymoney.telegrambot.business.service.payment.PaymentService;
+import com.sessionbot.telegram.commands.ReactiveBotCommand;
+import com.sessionbot.telegram.commands.annotations.CommandMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
