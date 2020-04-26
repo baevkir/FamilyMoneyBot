@@ -9,5 +9,5 @@ import reactor.core.publisher.Flux;
 import java.util.List;
 
 public interface PaymentRepository extends R2dbcRepository<PaymentEntity, Long> {
-    Flux<PaymentEntity> findAllByAccountIdIn(List<Long> accountIds);
+    Flux<PaymentEntity> findAllByAccountId(Long accountId);
 }

@@ -104,6 +104,7 @@ public class AccountServiceImpl implements AccountService {
 
     private Mono<UserAccountEntity> prepareAccountForUser(Account account, String userName) {
         return userService.getByUserName(userName)
+                .switchIfEmpty(Mono.error(() -> new RuntimeException(String.format("Пользователь с именем %s не найден", userName))))
                 .flatMap(user -> find(user.getId(), userName)
                         .hasElement()
                         .map(hasElement -> {

@@ -47,8 +47,7 @@ public class PaymentServiceImpl implements PaymentService {
         Objects.requireNonNull(telegramId, "telegramId is null.");
         return userService.getByTelegramId(telegramId)
                 .flatMapMany(user -> accountService.getAllIds(user.getId()))
-                .collect(Collectors.toList())
-                .flatMapMany(userIds -> paymentRepository.findAllByAccountIdIn(userIds))
+                .flatMap(paymentRepository::findAllByAccountId)
                 .flatMap(entity -> prepareDataForPayment(entity)
                         .map(data -> paymentMapper.fromEntity(entity, data.getT1(), data.getT2(), data.getT3())));
     }

@@ -28,9 +28,9 @@ public class GetPaymentsCommand extends ReactiveBotCommand {
         return paymentService.getAllByTelegramUserId(command.getFrom().getId()).collect(Collectors.toList()).map(payments -> {
             String message = payments.stream()
                     .map(payment -> String.format(
-                            "Пользователь: %s Дата: %s Вид Оплаты: %s Категория: %s Сумма: %s",
-                            payment.getUser().getFullName(),
+                            "%s / %s / %s / %s / %s",
                             payment.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                            payment.getUser().getFullName(),
                             payment.getAccount().getName(),
                             payment.getCategory().getName(),
                             payment.getAmount()))

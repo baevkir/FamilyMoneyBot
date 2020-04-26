@@ -39,8 +39,7 @@ public class IncomeServiceImpl implements IncomeService {
         Objects.requireNonNull(telegramId, "telegramId is null.");
         return userService.getByTelegramId(telegramId)
                 .flatMapMany(user -> accountService.getAllIds(user.getId()))
-                .collect(Collectors.toList())
-                .flatMapMany(userIds -> incomeRepository.findAllByAccountIdIn(userIds))
+                .flatMap(incomeRepository::findAllByAccountId)
                 .flatMap(entity -> prepareData(entity)
                         .map(data -> incomeMapper.fromEntity(entity, data.getT1(), data.getT2())));
     }

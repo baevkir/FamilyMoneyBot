@@ -92,7 +92,8 @@ public class PaymentCategoryServiceImpl implements PaymentCategoryService {
 
     @Override
     public Mono<Void> shareForUser(Integer sourceTelegramId, String targetUserName) {
-        return userService.getByUserName(targetUserName).switchIfEmpty(Mono.error(() -> new RuntimeException(String.format("Пользователь %s не найден", targetUserName))))
+        return userService.getByUserName(targetUserName)
+                .switchIfEmpty(Mono.error(() -> new RuntimeException(String.format("Пользователь %s не найден", targetUserName))))
                 .zipWith(userService.getByTelegramId(sourceTelegramId))
                 .flatMapMany(tuple -> getCategoriesToShare(tuple.getT1(), tuple.getT2()))
                 .collectList()

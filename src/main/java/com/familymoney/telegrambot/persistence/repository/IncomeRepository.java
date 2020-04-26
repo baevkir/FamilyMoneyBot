@@ -6,8 +6,9 @@ import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface IncomeRepository extends R2dbcRepository<IncomeEntity, Long> {
-    Flux<IncomeEntity> findAllByAccountIdIn(List<Long> accountIds);
+    Flux<IncomeEntity> findAllByAccountId(Long accountId);
 }

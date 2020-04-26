@@ -38,7 +38,7 @@ public class IncomeCommand extends ReactiveBotCommand {
     public Mono<? extends BotApiMethod<?>> process(
             Message command,
             @Param(index = 0, displayName = "Дата поступления", errorType = DateValidationException.class) LocalDate date,
-            @Param(index = 0, displayName = "Вид оплаты", errorType = AccountValidationException.class) String type,
+            @Param(index = 1, displayName = "Вид оплаты", errorType = AccountValidationException.class) String type,
             @Param(index = 2, displayName = "Сумма") BigDecimal amount) {
 
         Income income = new Income();
