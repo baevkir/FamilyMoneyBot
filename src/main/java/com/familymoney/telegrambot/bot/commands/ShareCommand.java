@@ -18,7 +18,7 @@ public class ShareCommand extends ReactiveBotCommand {
     private AccountService accountService;
 
     public ShareCommand(PaymentCategoryService paymentCategoryService, AccountService accountService) {
-        super("share", "Add possibility to share data with other telegram users.");
+        super("share", "Распрастранить объекты другому пользователю.");
         this.paymentCategoryService = paymentCategoryService;
         this.accountService = accountService;
     }
