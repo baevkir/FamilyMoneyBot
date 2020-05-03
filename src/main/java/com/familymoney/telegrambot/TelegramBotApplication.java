@@ -36,6 +36,7 @@ public class TelegramBotApplication {
     private Mono<String> getSchema() throws URISyntaxException {
         URL schema = getClass().getResource("/schema.sql");
         Objects.requireNonNull(schema, "Cannot find schema in classpath.");
+        log.debug("Find schema in classpath {}", schema);
         Path path = Paths.get(schema.toURI());
         return Flux
                 .using(() -> Files.lines(path), Flux::fromStream, BaseStream::close)
