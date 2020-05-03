@@ -11,9 +11,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.stream.BaseStream;
 
 @Slf4j
@@ -32,7 +34,9 @@ public class TelegramBotApplication {
     }
 
     private Mono<String> getSchema() throws URISyntaxException {
-        Path path = Paths.get(getClass().getResource("/schema.sql").toURI());
+        URL schema = getClass().getResource("/schema.sql");
+        Objects.requireNonNull(schema, "Cannot find schema in classpath.");
+        Path path = Paths.get(schema.toURI());
         return Flux
                 .using(() -> Files.lines(path), Flux::fromStream, BaseStream::close)
                 .reduce((line1, line2) -> line1 + "\n" + line2);
