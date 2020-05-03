@@ -32,7 +32,7 @@ public class TelegramBotApplication {
     }
 
     private Mono<String> getSchema() throws URISyntaxException {
-        Path path = Paths.get(ClassLoader.getSystemResource("schema.sql").toURI());
+        Path path = Paths.get(getClass().getResource("/schema.sql").toURI());
         return Flux
                 .using(() -> Files.lines(path), Flux::fromStream, BaseStream::close)
                 .reduce((line1, line2) -> line1 + "\n" + line2);
