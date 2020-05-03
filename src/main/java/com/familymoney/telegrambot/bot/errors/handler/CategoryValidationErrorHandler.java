@@ -2,7 +2,7 @@ package com.familymoney.telegrambot.bot.errors.handler;
 
 import com.familymoney.telegrambot.bot.errors.PaymentCategoryValidationException;
 import com.familymoney.telegrambot.business.service.payment.PaymentCategoryService;
-import com.sessionbot.telegram.errors.handler.ErrorHandler;
+import com.sessionbot.errors.handler.ErrorHandler;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

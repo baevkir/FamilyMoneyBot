@@ -1,8 +1,8 @@
 package com.familymoney.telegrambot.bot.commands;
 
 import com.familymoney.telegrambot.business.service.IncomeService;
-import com.sessionbot.telegram.commands.ReactiveBotCommand;
-import com.sessionbot.telegram.commands.annotations.CommandMethod;
+import com.sessionbot.commands.ReactiveBotCommand;
+import com.sessionbot.commands.annotations.CommandMethod;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

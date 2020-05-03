@@ -28,7 +28,7 @@
     <dependencies>
         <dependency>
             <groupId>com.sessionbot</groupId>
-            <artifactId>sessionbot-telegram-spring-boot-starter</artifactId>
+            <artifactId>session-bot-starter</artifactId>
             <version>${sessionbot.version}</version>
         </dependency>
         <dependency>
