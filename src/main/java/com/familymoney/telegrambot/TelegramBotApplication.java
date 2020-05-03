@@ -10,11 +10,18 @@ import org.springframework.data.r2dbc.core.DatabaseClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.BaseStream;
 
@@ -33,14 +40,14 @@ public class TelegramBotApplication {
                 .subscribe(count -> log.info("Schema created"));
     }
 
-    private Mono<String> getSchema() throws URISyntaxException {
-        URL schema = getClass().getResource("/schema.sql");
-        Objects.requireNonNull(schema, "Cannot find schema in classpath.");
-        log.debug("Find schema in classpath {}", schema);
-        Path path = Paths.get(schema.toURI());
-        return Flux
-                .using(() -> Files.lines(path), Flux::fromStream, BaseStream::close)
-                .reduce((line1, line2) -> line1 + "\n" + line2);
+    private Mono<String> getSchema() {
+        return Mono.fromSupplier(() -> {
+            try (InputStream schemaStream = getClass().getResourceAsStream("/schema.sql")) {
+                return schemaStream.readAllBytes();
+            } catch (IOException e) {
+                throw new RuntimeException("Cannot read schema", e);
+            }
+        }).map(String::new);
     }
 
     private Mono<Integer> executeSql(DatabaseClient client, String sql) {
