@@ -9,10 +9,10 @@
         <relativePath/>
     </parent>
     <groupId>com.familymoney</groupId>
-    <artifactId>telegrambot</artifactId>
+    <artifactId>family-money</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>family-money-telegram-bot</name>
+    <name>family-money</name>
 
     <properties>
         <java.version>11</java.version>
@@ -139,7 +139,16 @@
             <url>https://repo.spring.io/plugins-release/</url>
         </pluginRepository>
     </pluginRepositories>
+
     <repositories>
+        <repository>
+            <id>library-project-mvn-repo</id>
+            <url>https://raw.github.com/baevkir/library-project/mvn-repo/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
         <repository>
             <id>spring-milestones</id>
             <url>https://repo.spring.io/libs-milestone</url>
@@ -162,14 +171,6 @@
         <repository>
             <id>spring-releases</id>
             <url>https://repo.spring.io/libs-release</url>
-        </repository>
-        <repository>
-            <id>library-project-mvn-repo</id>
-            <url>https://raw.github.com/baevkir/library-project/mvn-repo/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
         </repository>
     </repositories>
 </project>
