@@ -2,7 +2,7 @@ spring:
   r2dbc:
     username: ${FM_DB_USERNAME}
     password: ${FM_DB_PASSWORD}
-    url: r2dbc:postgresql://${FM_DB_HOST}:${FM_DB_PORT}/${FM_DB_SCHEMA}
+    url: ${FM_DB_URL}
 
 sessionbot:
   telegram:
