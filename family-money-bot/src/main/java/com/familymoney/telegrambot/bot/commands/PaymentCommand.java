@@ -1,11 +1,11 @@
 package com.familymoney.telegrambot.bot.commands;
 
+import com.familymoney.model.Account;
+import com.familymoney.model.Payment;
+import com.familymoney.model.PaymentCategory;
 import com.familymoney.telegrambot.bot.errors.AccountValidationException;
 import com.familymoney.telegrambot.bot.errors.PaymentCategoryValidationException;
 import com.familymoney.telegrambot.business.mapper.UserMapper;
-import com.familymoney.telegrambot.business.model.Account;
-import com.familymoney.telegrambot.business.model.Payment;
-import com.familymoney.telegrambot.business.model.PaymentCategory;
 import com.familymoney.telegrambot.business.service.payment.PaymentService;
 import com.sessionbot.commands.ReactiveBotCommand;
 import com.sessionbot.commands.annotations.CommandMethod;

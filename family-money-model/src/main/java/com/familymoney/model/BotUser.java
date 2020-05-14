@@ -1,4 +1,4 @@
-package com.familymoney.telegrambot.business.model;
+package com.familymoney.model;
 
 import lombok.Data;
 

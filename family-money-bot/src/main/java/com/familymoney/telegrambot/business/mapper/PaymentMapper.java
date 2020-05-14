@@ -1,9 +1,9 @@
 package com.familymoney.telegrambot.business.mapper;
 
-import com.familymoney.telegrambot.business.model.Account;
-import com.familymoney.telegrambot.business.model.BotUser;
-import com.familymoney.telegrambot.business.model.Payment;
-import com.familymoney.telegrambot.business.model.PaymentCategory;
+import com.familymoney.model.Account;
+import com.familymoney.model.BotUser;
+import com.familymoney.model.Payment;
+import com.familymoney.model.PaymentCategory;
 import com.familymoney.telegrambot.persistence.entity.PaymentEntity;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;

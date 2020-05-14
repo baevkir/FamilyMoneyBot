@@ -5,6 +5,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>family-money-bot</module>
+        <module>family-money-model</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -1,6 +1,6 @@
 package com.familymoney.telegrambot.business.mapper;
 
-import com.familymoney.telegrambot.business.model.Account;
+import com.familymoney.model.Account;
 import com.familymoney.telegrambot.persistence.entity.account.AccountEntity;
 import org.mapstruct.Mapper;
 

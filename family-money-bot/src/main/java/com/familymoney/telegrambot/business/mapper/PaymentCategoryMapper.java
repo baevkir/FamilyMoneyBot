@@ -1,6 +1,6 @@
 package com.familymoney.telegrambot.business.mapper;
 
-import com.familymoney.telegrambot.business.model.PaymentCategory;
+import com.familymoney.model.PaymentCategory;
 import com.familymoney.telegrambot.persistence.entity.category.PaymentCategoryEntity;
 import org.mapstruct.Mapper;
 

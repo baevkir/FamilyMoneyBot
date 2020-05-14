@@ -1,11 +1,9 @@
 package com.familymoney.telegrambot.business.mapper;
 
-import com.familymoney.telegrambot.business.model.BotUser;
+import com.familymoney.model.BotUser;
 import com.familymoney.telegrambot.persistence.entity.UserEntity;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.telegram.telegrambots.meta.api.objects.User;
 

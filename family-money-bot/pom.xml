@@ -12,6 +12,11 @@
     <artifactId>family-money-bot</artifactId>
     <dependencies>
         <dependency>
+            <groupId>com.familymoney</groupId>
+            <artifactId>family-money-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.sessionbot</groupId>
             <artifactId>session-bot-starter</artifactId>
         </dependency>

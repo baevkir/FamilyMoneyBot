@@ -1,7 +1,7 @@
 package com.familymoney.telegrambot.business.service;
 
+import com.familymoney.model.Account;
 import com.familymoney.telegrambot.business.mapper.AccountMapper;
-import com.familymoney.telegrambot.business.model.Account;
 import com.familymoney.telegrambot.persistence.entity.account.UserAccountEntity;
 import com.familymoney.telegrambot.persistence.repository.account.AccountRepository;
 import com.familymoney.telegrambot.persistence.repository.account.UserAccountRepository;

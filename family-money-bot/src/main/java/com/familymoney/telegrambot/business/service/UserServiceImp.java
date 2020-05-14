@@ -1,10 +1,9 @@
 package com.familymoney.telegrambot.business.service;
 
+import com.familymoney.model.BotUser;
 import com.familymoney.telegrambot.business.mapper.UserMapper;
-import com.familymoney.telegrambot.business.model.BotUser;
 import com.familymoney.telegrambot.persistence.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.User;
 import reactor.core.publisher.Mono;
 
 import java.util.Objects;

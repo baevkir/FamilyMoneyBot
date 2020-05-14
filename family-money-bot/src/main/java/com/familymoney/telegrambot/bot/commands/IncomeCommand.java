@@ -1,9 +1,9 @@
 package com.familymoney.telegrambot.bot.commands;
 
+import com.familymoney.model.Account;
+import com.familymoney.model.Income;
 import com.familymoney.telegrambot.bot.errors.AccountValidationException;
 import com.familymoney.telegrambot.business.mapper.UserMapper;
-import com.familymoney.telegrambot.business.model.Account;
-import com.familymoney.telegrambot.business.model.Income;
 import com.familymoney.telegrambot.business.service.IncomeService;
 import com.sessionbot.commands.ReactiveBotCommand;
 import com.sessionbot.commands.annotations.CommandMethod;

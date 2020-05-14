@@ -1,8 +1,8 @@
 package com.familymoney.telegrambot.business.service.payment;
 
+import com.familymoney.model.BotUser;
+import com.familymoney.model.PaymentCategory;
 import com.familymoney.telegrambot.business.mapper.PaymentCategoryMapper;
-import com.familymoney.telegrambot.business.model.BotUser;
-import com.familymoney.telegrambot.business.model.PaymentCategory;
 import com.familymoney.telegrambot.business.service.UserService;
 import com.familymoney.telegrambot.persistence.entity.category.UserPaymentCategoryEntity;
 import com.familymoney.telegrambot.persistence.repository.category.PaymentCategoryRepository;

@@ -1,9 +1,9 @@
 package com.familymoney.telegrambot.business.service;
 
+import com.familymoney.model.Account;
+import com.familymoney.model.BotUser;
+import com.familymoney.model.Income;
 import com.familymoney.telegrambot.business.mapper.IncomeMapper;
-import com.familymoney.telegrambot.business.model.Account;
-import com.familymoney.telegrambot.business.model.BotUser;
-import com.familymoney.telegrambot.business.model.Income;
 import com.familymoney.telegrambot.persistence.entity.IncomeEntity;
 import com.familymoney.telegrambot.persistence.repository.IncomeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,6 @@ import reactor.util.function.Tuples;
 
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service

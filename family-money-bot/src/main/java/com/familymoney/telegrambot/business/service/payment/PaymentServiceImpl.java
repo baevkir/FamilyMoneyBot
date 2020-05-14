@@ -1,10 +1,10 @@
 package com.familymoney.telegrambot.business.service.payment;
 
+import com.familymoney.model.Account;
+import com.familymoney.model.BotUser;
+import com.familymoney.model.Payment;
+import com.familymoney.model.PaymentCategory;
 import com.familymoney.telegrambot.business.mapper.PaymentMapper;
-import com.familymoney.telegrambot.business.model.BotUser;
-import com.familymoney.telegrambot.business.model.Payment;
-import com.familymoney.telegrambot.business.model.PaymentCategory;
-import com.familymoney.telegrambot.business.model.Account;
 import com.familymoney.telegrambot.business.service.AccountService;
 import com.familymoney.telegrambot.business.service.UserService;
 import com.familymoney.telegrambot.persistence.entity.PaymentEntity;
@@ -18,7 +18,6 @@ import reactor.util.function.Tuple3;
 import reactor.util.function.Tuples;
 
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
