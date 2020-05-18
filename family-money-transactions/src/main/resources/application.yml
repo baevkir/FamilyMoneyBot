@@ -1,6 +1,8 @@
+server:
+  port: 8091
 spring:
   application:
-    name: family-money-bot
+    name: family-money-transactions
 eureka:
   client:
     service-url:
