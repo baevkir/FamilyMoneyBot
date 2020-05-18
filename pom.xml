@@ -79,9 +79,8 @@
 
     <distributionManagement>
         <repository>
-            <id>internal.repo</id>
-            <name>Temporary Staging Repository</name>
-            <url>file://${project.build.directory}/mvn-repo</url>
+            <id>gdrive_repository</id>
+            <url>file://${env.GDRIVE_HOME}/repository</url>
         </repository>
     </distributionManagement>
 
@@ -142,49 +141,7 @@
                         </annotationProcessorPaths>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <configuration>
-                        <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo
-                        </altDeploymentRepository>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>com.github.github</groupId>
-                    <artifactId>site-maven-plugin</artifactId>
-                    <version>${github.maven-plugin}</version>
-                    <configuration>
-                        <server>github</server>
-                        <message>Maven artifacts for ${project.version}</message>
-                        <noJekyll>true</noJekyll>
-                        <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
-                        <branch>refs/heads/mvn-repo</branch>
-                        <includes>
-                            <include>**/*</include>
-                        </includes>
-                        <repositoryName>library-project</repositoryName>
-                        <repositoryOwner>baevkir</repositoryOwner>
-                        <merge>true</merge>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>site</goal>
-                            </goals>
-                            <phase>deploy</phase>
-                        </execution>
-                    </executions>
-                </plugin>
             </plugins>
         </pluginManagement>
-        <plugins>
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
     </build>
 </project>
