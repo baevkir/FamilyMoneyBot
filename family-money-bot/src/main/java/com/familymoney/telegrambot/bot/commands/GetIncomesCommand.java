@@ -23,14 +23,14 @@ public class GetIncomesCommand extends ReactiveBotCommand {
 
     @CommandMethod
     public Mono<? extends BotApiMethod<?>> process(Message command) {
-        return incomeService.getAllByTelegramUserId(command.getFrom().getId()).collect(Collectors.toList()).map(payments -> {
-            String message = payments.stream()
-                    .map(payment -> String.format(
+        return incomeService.getAllByTelegramUserId(command.getFrom().getId()).collect(Collectors.toList()).map(incomes -> {
+            String message = incomes.stream()
+                    .map(income -> String.format(
                             "%s / %s / %s / %s",
-                            payment.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                            payment.getUser().getFullName(),
-                            payment.getAccount().getName(),
-                            payment.getAmount()))
+                            income.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                            income.getUser().getFullName(),
+                            income.getAccount().getName(),
+                            income.getAmount()))
                     .collect(Collectors.joining("\n", "Поступления: \n", ""));
 
             return new SendMessage(command.getChatId(), message);
