@@ -12,7 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("family-money/v1/payments")
+@RequestMapping("family-money/v1/transactions/payments")
 public class PaymentController {
 
     private PaymentService paymentService;

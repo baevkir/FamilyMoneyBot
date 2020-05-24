@@ -14,7 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("family-money/v1/incomes")
+@RequestMapping("family-money/v1/transactions/incomes")
 public class IncomeController {
 
     private IncomeService incomeService;

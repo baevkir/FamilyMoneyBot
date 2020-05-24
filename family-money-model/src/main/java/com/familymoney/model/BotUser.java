@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class BotUser {
     private Long id;
-    private Integer telegramId;
+    private Long telegramId;
     private String userName;
     private String firstName;
     private String lastName;
