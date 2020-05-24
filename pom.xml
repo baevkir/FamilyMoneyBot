@@ -7,6 +7,8 @@
         <module>family-money-bot</module>
         <module>family-money-model</module>
         <module>family-money-transactions</module>
+        <module>family-money-accounts</module>
+        <module>family-money-categories</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
