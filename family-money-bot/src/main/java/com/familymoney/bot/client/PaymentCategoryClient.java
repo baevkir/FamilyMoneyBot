@@ -27,7 +27,7 @@ public class PaymentCategoryClient {
     public Mono<PaymentCategory> resolvePaymentCategory(PaymentCategory paymentCategory){
         return webClientBuilder.build()
                 .post()
-                .uri(BASE_URL + "/resolve")
+                .uri(BASE_URL + "/resolve", paymentCategory.getUserId())
                 .bodyValue(paymentCategory)
                 .retrieve()
                 .bodyToMono(PaymentCategory.class);

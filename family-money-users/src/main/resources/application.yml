@@ -3,3 +3,11 @@ server:
 spring:
   application:
     name: family-money-users
+  r2dbc:
+    username: postgres
+    password: 123
+    url: r2dbc:postgresql://192.168.1.135:5432/family_money_db
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.1.135:8761/eureka

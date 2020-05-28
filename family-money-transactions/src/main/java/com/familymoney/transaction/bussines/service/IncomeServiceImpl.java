@@ -3,6 +3,7 @@ package com.familymoney.transaction.bussines.service;
 import com.familymoney.model.Income;
 import com.familymoney.transaction.bussines.mapper.IncomeMapper;
 import com.familymoney.transaction.persistence.repository.IncomeRepository;
+import com.familymoney.transaction.web.client.AccountClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,16 +18,18 @@ import java.util.Objects;
 public class IncomeServiceImpl implements IncomeService {
     private IncomeRepository incomeRepository;
     private IncomeMapper incomeMapper;
+    private AccountClient accountClient;
 
-    public IncomeServiceImpl(IncomeRepository incomeRepository, IncomeMapper incomeMapper) {
+    public IncomeServiceImpl(IncomeRepository incomeRepository, IncomeMapper incomeMapper, AccountClient accountClient) {
         this.incomeRepository = incomeRepository;
         this.incomeMapper = incomeMapper;
+        this.accountClient = accountClient;
     }
 
     @Override
-    public Flux<Income> getAllByAccountIds(Long... accountIds) {
-        Objects.requireNonNull(accountIds, "accountIds is null.");
-        return Flux.fromArray(accountIds)
+    public Flux<Income> getAll(Long userId) {
+        Objects.requireNonNull(userId, "userId is null.");
+        return accountClient.getAllIds(userId)
                 .flatMap(incomeRepository::findAllByAccountId)
                 .map(incomeMapper::fromEntity);
     }

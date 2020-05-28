@@ -5,6 +5,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface IncomeService {
-    Flux<Income> getAllByAccountIds(Long... accountIds);
+    Flux<Income> getAll(Long userId);
     Mono<Income> create(Income income);
 }

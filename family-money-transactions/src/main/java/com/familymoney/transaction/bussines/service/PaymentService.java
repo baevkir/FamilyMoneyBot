@@ -5,6 +5,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface PaymentService {
-    Flux<Payment> getAllByAccountIds(Long... accountIds);
+    Flux<Payment> getAll(Long userId);
     Mono<Payment> create(Payment payment);
 }

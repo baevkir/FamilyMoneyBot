@@ -4,6 +4,7 @@ import com.familymoney.categories.bussines.service.CategoryService;
 import com.familymoney.model.Account;
 import com.familymoney.model.PaymentCategory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +24,13 @@ public class CategoriesController {
     }
 
     @GetMapping
-    public Flux<PaymentCategory> getAll(@RequestParam Long userId) {
+    public Flux<PaymentCategory> getAll(@PathVariable Long userId) {
         return categoryService.getAll(userId);
     }
 
     @PutMapping(value = "resolve")
-    public Mono<PaymentCategory> resolve(@RequestBody PaymentCategory paymentCategory) {
+    public Mono<PaymentCategory> resolve(@PathVariable Long userId, @RequestBody PaymentCategory paymentCategory) {
+        paymentCategory.setUserId(userId);
         return categoryService.resolve(paymentCategory);
     }
 

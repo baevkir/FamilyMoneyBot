@@ -33,7 +33,7 @@ public class UserClient {
     public Mono<BotUser> resolveUser(BotUser user){
         return webClientBuilder.build()
                 .put()
-                .uri(BASE_URL)
+                .uri(BASE_URL + "/resolve")
                 .bodyValue(user)
                 .retrieve()
                 .bodyToMono(BotUser.class);

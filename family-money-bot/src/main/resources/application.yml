@@ -1,4 +1,14 @@
+server:
+  port: 9095
 spring:
   application:
     name: family-money-bot
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.1.135:8761/eureka
+sessionbot:
+  telegram:
+    token: 1213283991:AAE5saIjNRIu9sSAFF751qJRYjuhCZzX_bg
+    bot-username: FaMoneyBot
 

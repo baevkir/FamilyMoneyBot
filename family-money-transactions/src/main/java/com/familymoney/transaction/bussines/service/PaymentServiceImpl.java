@@ -3,6 +3,7 @@ package com.familymoney.transaction.bussines.service;
 import com.familymoney.model.Payment;
 import com.familymoney.transaction.bussines.mapper.PaymentMapper;
 import com.familymoney.transaction.persistence.repository.PaymentRepository;
+import com.familymoney.transaction.web.client.AccountClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,16 +19,18 @@ public class PaymentServiceImpl implements PaymentService {
 
     private PaymentRepository paymentRepository;
     private PaymentMapper paymentMapper;
+    private AccountClient accountClient;
 
-    public PaymentServiceImpl(PaymentRepository paymentRepository, PaymentMapper paymentMapper) {
+    public PaymentServiceImpl(PaymentRepository paymentRepository, PaymentMapper paymentMapper, AccountClient accountClient) {
         this.paymentRepository = paymentRepository;
         this.paymentMapper = paymentMapper;
+        this.accountClient = accountClient;
     }
 
     @Override
-    public Flux<Payment> getAllByAccountIds(Long... accountIds) {
-        Objects.requireNonNull(accountIds, "accountIds is null.");
-        return Flux.fromArray(accountIds)
+    public Flux<Payment> getAll(Long userId) {
+        Objects.requireNonNull(userId, "userId is null.");
+        return accountClient.getAllIds(userId)
                 .flatMap(paymentRepository::findAllByAccountId)
                 .map(paymentMapper::fromEntity);
     }
