@@ -10,7 +10,7 @@ import java.util.List;
 
 @Component
 public class IncomeClient {
-    private static  final String BASE_URL = "http://family-money-transactions/family-money/v1/transactions/incomes";
+    private static  final String BASE_URL = "http://:8080/family-money/v1/transactions/incomes";
     private WebClient.Builder webClientBuilder;
 
     public IncomeClient(WebClient.Builder webClientBuilder) {

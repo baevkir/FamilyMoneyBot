@@ -7,9 +7,9 @@ CREATE TABLE IF NOT EXISTS accounts
 
 CREATE TABLE IF NOT EXISTS user_accounts
 (
-    id         SERIAL NOT NULL UNIQUE,
-    user_id    INT    NOT NULL,
-    account_id INT    NOT NULL,
+    id         SERIAL                       NOT NULL UNIQUE,
+    user_id    INT                          NOT NULL,
+    account_id INT REFERENCES accounts (id) NOT NULL,
     PRIMARY KEY (id)
 );
 

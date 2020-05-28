@@ -1,21 +1,23 @@
 package com.familymoney.categories.bussines.service;
 
 import com.familymoney.categories.bussines.mapper.CategoryMapper;
+import com.familymoney.categories.persistence.entity.CategoryEntity;
+import com.familymoney.categories.persistence.entity.UserCategoryEntity;
 import com.familymoney.categories.persistence.repository.CategoryRepository;
-import com.familymoney.model.Account;
+import com.familymoney.categories.persistence.repository.UserCategoryRepository;
 import com.familymoney.model.PaymentCategory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import com.familymoney.categories.persistence.entity.PaymentCategoryEntity;
 import java.util.Objects;
 
 
 @Component
 public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
+    private UserCategoryRepository userCategoryRepository;
     private CategoryMapper categoryMapper;
 
     public CategoryServiceImpl(
@@ -36,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Flux<Long> getAllIds(Long userId) {
         Objects.requireNonNull(userId, "UserId should be not null.");
-        return categoryRepository.getAllByUserIdsContains(userId).map(PaymentCategoryEntity::getId);
+        return userCategoryRepository.getAllByUserId(userId).map(UserCategoryEntity::getCategoryId);
     }
 
     @Override

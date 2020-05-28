@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class PaymentCategoryClient {
-    private static  final String BASE_URL = "http://family-money-categories/family-money/v1/categoties";
+    private static  final String BASE_URL = "http://family-money-categories/family-money/v1/users/{userId}/categoties";
     private WebClient.Builder webClientBuilder;
 
     public PaymentCategoryClient(WebClient.Builder webClientBuilder) {
@@ -19,7 +19,7 @@ public class PaymentCategoryClient {
     public Flux<PaymentCategory> getAll(Long userId) {
         return webClientBuilder.build()
                 .get()
-                .uri(BASE_URL)
+                .uri(BASE_URL, userId)
                 .retrieve()
                 .bodyToFlux(PaymentCategory.class);
     }

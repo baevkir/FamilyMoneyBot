@@ -2,15 +2,12 @@ package com.familymoney.categories.persistence.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.List;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Data
-@Document
-public class PaymentCategoryEntity {
+@Table("payment_categories")
+public class CategoryEntity {
     @Id
     private Long id;
     private String name;
-    private List<Long> userIds;
 }

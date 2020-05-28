@@ -13,7 +13,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("family-money/v1/categories")
+@RequestMapping("family-money/v1/users/{userId}/categories")
 public class CategoriesController {
 
     private CategoryService categoryService;
@@ -22,7 +22,7 @@ public class CategoriesController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping()
+    @GetMapping
     public Flux<PaymentCategory> getAll(@RequestParam Long userId) {
         return categoryService.getAll(userId);
     }
