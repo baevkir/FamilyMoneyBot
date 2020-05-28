@@ -5,9 +5,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Data
-@Table("accounts")
-public class AccountEntity {
+@Table("user_accounts")
+public class UserAccountEntity {
     @Id
     private Long id;
-    private String name;
+    private Long accountId;
+    private Long userId;
 }

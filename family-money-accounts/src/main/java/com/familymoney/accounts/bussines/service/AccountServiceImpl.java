@@ -2,7 +2,9 @@ package com.familymoney.accounts.bussines.service;
 
 import com.familymoney.accounts.bussines.mapper.AccountMapper;
 import com.familymoney.accounts.persistence.entity.AccountEntity;
+import com.familymoney.accounts.persistence.entity.UserAccountEntity;
 import com.familymoney.accounts.persistence.repository.AccountRepository;
+import com.familymoney.accounts.persistence.repository.UserAccountRepository;
 import com.familymoney.model.Account;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,13 +17,12 @@ import java.util.Objects;
 @Component
 public class AccountServiceImpl implements AccountService {
     private AccountRepository accountRepository;
+    private UserAccountRepository userAccountRepository;
     private AccountMapper accountMapper;
 
-    public AccountServiceImpl(
-            AccountRepository accountRepository,
-            AccountMapper accountMapper
-    ) {
+    public AccountServiceImpl(AccountRepository accountRepository, UserAccountRepository userAccountRepository, AccountMapper accountMapper) {
         this.accountRepository = accountRepository;
+        this.userAccountRepository = userAccountRepository;
         this.accountMapper = accountMapper;
     }
 
@@ -35,7 +36,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Flux<Long> getAllIds(Long userId) {
         Objects.requireNonNull(userId, "UserId should be not null.");
-        return accountRepository.getAllByUserIdsContains(userId).map(AccountEntity::getId);
+        return userAccountRepository.getAllByUserId(userId).map(UserAccountEntity::getAccountId);
     }
 
     @Override

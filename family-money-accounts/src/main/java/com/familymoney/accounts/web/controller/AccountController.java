@@ -12,7 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("family-money/v1/accounts")
+@RequestMapping("family-money/v1/users/{userId}/accounts")
 public class AccountController {
 
     private AccountService accountService;

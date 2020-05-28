@@ -1,9 +1,10 @@
 package com.familymoney.accounts.persistence.repository;
 
 import com.familymoney.accounts.persistence.entity.AccountEntity;
+import com.familymoney.accounts.persistence.entity.UserAccountEntity;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 
-public interface AccountRepository extends R2dbcRepository<AccountEntity, Long> {
+public interface UserAccountRepository extends R2dbcRepository<UserAccountEntity, Long> {
+    Flux<UserAccountEntity> getAllByUserId(Long userId);
 }
