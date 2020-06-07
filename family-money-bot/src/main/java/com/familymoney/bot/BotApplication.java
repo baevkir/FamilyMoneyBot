@@ -17,11 +17,4 @@ public class BotApplication {
     public static void main(String[] args) {
         SpringApplication.run(BotApplication.class, args);
     }
-
-    @Bean
-    @Scope("prototype")
-    @LoadBalanced
-    public WebClient.Builder loadBalancedWebClientBuilder() {
-        return WebClient.builder();
-    }
 }

@@ -1,9 +1,10 @@
 package com.familymoney.transaction.bussines.service;
 
+import com.familymoney.clients.AccountClient;
+import com.familymoney.model.Account;
 import com.familymoney.model.Income;
 import com.familymoney.transaction.bussines.mapper.IncomeMapper;
 import com.familymoney.transaction.persistence.repository.IncomeRepository;
-import com.familymoney.transaction.web.client.AccountClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,9 +46,15 @@ public class IncomeServiceImpl implements IncomeService {
         if (income.getDate() == null) {
             income.setDate(LocalDate.now());
         }
-        return incomeRepository.save(incomeMapper.toEntity(income))
+        Account account = income.getAccount();
+        account.setUserId(income.getUser().getId());
+        return accountClient.resolveAccount(account)
+                .flatMap(result -> {
+                    income.setAccount(result);
+                    return incomeRepository.save(incomeMapper.toEntity(income));
+                })
                 .map(incomeMapper::fromEntity);
-
     }
 
 }
+

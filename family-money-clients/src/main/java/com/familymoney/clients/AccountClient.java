@@ -1,4 +1,4 @@
-package com.familymoney.transaction.web.client;
+package com.familymoney.clients;
 
 import com.familymoney.model.Account;
 import org.springframework.stereotype.Component;
@@ -33,8 +33,8 @@ public class AccountClient {
 
     public Mono<Account> resolveAccount(Account account){
         return webClientBuilder.build()
-                .post()
-                .uri(BASE_URL + "/resolve")
+                .put()
+                .uri(BASE_URL + "/resolve", account.getUserId())
                 .bodyValue(account)
                 .retrieve()
                 .bodyToMono(Account.class);

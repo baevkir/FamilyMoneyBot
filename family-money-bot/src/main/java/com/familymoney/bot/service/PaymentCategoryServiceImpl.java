@@ -1,7 +1,7 @@
 package com.familymoney.bot.service;
 
-import com.familymoney.bot.client.PaymentCategoryClient;
-import com.familymoney.bot.client.UserClient;
+import com.familymoney.clients.PaymentCategoryClient;
+import com.familymoney.clients.UserClient;
 import com.familymoney.model.PaymentCategory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

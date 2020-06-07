@@ -1,4 +1,4 @@
-package com.familymoney.bot.client;
+package com.familymoney.clients;
 
 import com.familymoney.model.BotUser;
 import org.springframework.stereotype.Component;

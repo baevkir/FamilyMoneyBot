@@ -10,6 +10,7 @@
         <module>family-money-categories</module>
         <module>family-money-users</module>
         <module>family-money-transactions</module>
+        <module>family-money-clients</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

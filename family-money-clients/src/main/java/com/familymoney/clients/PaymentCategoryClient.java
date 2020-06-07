@@ -1,4 +1,4 @@
-package com.familymoney.bot.client;
+package com.familymoney.clients;
 
 import com.familymoney.model.Account;
 import com.familymoney.model.PaymentCategory;

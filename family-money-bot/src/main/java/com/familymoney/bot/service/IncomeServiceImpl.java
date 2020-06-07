@@ -1,7 +1,7 @@
 package com.familymoney.bot.service;
 
-import com.familymoney.bot.client.IncomeClient;
-import com.familymoney.bot.client.UserClient;
+import com.familymoney.clients.IncomeClient;
+import com.familymoney.clients.UserClient;
 import com.familymoney.model.BotUser;
 import com.familymoney.model.Income;
 import lombok.extern.slf4j.Slf4j;

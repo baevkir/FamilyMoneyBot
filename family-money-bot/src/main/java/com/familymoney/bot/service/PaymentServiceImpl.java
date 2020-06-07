@@ -1,19 +1,13 @@
 package com.familymoney.bot.service;
 
-import com.familymoney.bot.client.AccountClient;
-import com.familymoney.bot.client.PaymentCategoryClient;
-import com.familymoney.bot.client.PaymentClient;
-import com.familymoney.bot.client.UserClient;
-import com.familymoney.model.Account;
+import com.familymoney.clients.PaymentClient;
+import com.familymoney.clients.UserClient;
 import com.familymoney.model.BotUser;
 import com.familymoney.model.Payment;
-import com.familymoney.model.PaymentCategory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuple3;
-import reactor.util.function.Tuples;
 
 import java.time.LocalDate;
 import java.util.Objects;
